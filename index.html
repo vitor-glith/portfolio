@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfólio 3D | Habilidades Interativas</title>
+    <!-- Google Fonts para fontes tecnológicas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;800&family=Audiowide&family=Rajdhani:wght@300;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -79,10 +83,12 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 800;
-            letter-spacing: 4px;
+            letter-spacing: 8px;
             text-transform: uppercase;
+            /* Opção 3: Tecnológica/Futurista */
+            font-family: 'Orbitron', 'Audiowide', 'Rajdhani', sans-serif;
             background: linear-gradient(135deg, #a8ffcf, #b79aff, #a8ffcf);
             background-size: 200% 200%;
             -webkit-background-clip: text;
@@ -94,6 +100,7 @@
             white-space: nowrap;
             z-index: 5;
             margin: 0;
+            text-shadow: 0 0 20px rgba(170, 255, 200, 0.5);
         }
 
         @keyframes auroraShift {
@@ -386,7 +393,7 @@
         }
 
         @media (max-width: 1000px) {
-            .main-title { font-size: 2.5rem; top: 12%; }
+            .main-title { font-size: 2.5rem; top: 12%; letter-spacing: 4px; }
             .main-container { flex-direction: column; align-items: stretch; }
             .skills-panel { margin-right: 0; margin-bottom: 1rem; max-width: 100%; }
             .projects { max-width: 100%; }
@@ -402,7 +409,7 @@
             <div class="tagline">full-stack · artist</div>
         </div>
 
-        <h1 class="main-title">PORTFOLIO</h1>
+        <h1 class="main-title">⚡ PORTFOLIO ⚡</h1>
 
         <div class="main-container">
             <!-- Painel de habilidades -->
