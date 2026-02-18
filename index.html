@@ -87,7 +87,6 @@
             font-weight: 800;
             letter-spacing: 8px;
             text-transform: uppercase;
-            /* Opção 3: Tecnológica/Futurista */
             font-family: 'Orbitron', 'Audiowide', 'Rajdhani', sans-serif;
             background: linear-gradient(135deg, #a8ffcf, #b79aff, #a8ffcf);
             background-size: 200% 200%;
@@ -96,11 +95,17 @@
             background-clip: text;
             animation: auroraShift 8s infinite alternate;
             filter: drop-shadow(0 0 40px #5f3bff);
-            pointer-events: none;
+            cursor: pointer;
             white-space: nowrap;
-            z-index: 5;
+            z-index: 15;
             margin: 0;
             text-shadow: 0 0 20px rgba(170, 255, 200, 0.5);
+            transition: transform 0.3s;
+        }
+
+        .main-title:hover {
+            transform: translateX(-50%) scale(1.1);
+            filter: drop-shadow(0 0 60px #a0ffc0);
         }
 
         @keyframes auroraShift {
@@ -274,6 +279,72 @@
             white-space: nowrap;
         }
 
+        /* Mini game Galaga */
+        .game-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #a0ffc0;
+            border-radius: 20px;
+            z-index: 200;
+            display: none;
+            box-shadow: 0 0 50px #6a4eff;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-container.active {
+            display: block;
+        }
+
+        .game-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 17px;
+            background: #000;
+        }
+
+        .game-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            background: #a0ffc0;
+            border: 2px solid #6a4eff;
+            border-radius: 50%;
+            color: #0a0a1a;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            z-index: 201;
+        }
+
+        .game-close:hover {
+            transform: scale(1.2);
+            background: #ff6a6a;
+            color: white;
+        }
+
+        .game-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #a0ffc0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px #6a4eff;
+            white-space: nowrap;
+        }
+
         /* Páginas de habilidades - com canvas individuais */
         .skill-page {
             position: fixed;
@@ -398,6 +469,7 @@
             .skills-panel { margin-right: 0; margin-bottom: 1rem; max-width: 100%; }
             .projects { max-width: 100%; }
             .content { padding: 1rem; }
+            .game-container { width: 95%; height: auto; aspect-ratio: 4/3; }
         }
     </style>
 </head>
@@ -409,7 +481,7 @@
             <div class="tagline">full-stack · artist</div>
         </div>
 
-        <h1 class="main-title">⚡ PORTFOLIO ⚡</h1>
+        <h1 class="main-title" onclick="toggleGame()">PORTFOLIO</h1>
 
         <div class="main-container">
             <!-- Painel de habilidades -->
@@ -481,6 +553,13 @@
         </div>
 
         <div class="footer-note">✦ clique nos cards para explorar cada habilidade ✦</div>
+    </div>
+
+    <!-- Mini Game Galaga Container -->
+    <div id="gameContainer" class="game-container">
+        <div class="game-title">✦ GALAGA GALAXY ✦</div>
+        <div class="game-close" onclick="toggleGame()">×</div>
+        <canvas id="gameCanvas" class="game-canvas"></canvas>
     </div>
 
     <!-- Páginas individuais de cada habilidade com canvas próprios -->
@@ -773,51 +852,39 @@
         // Desabilitar auto-rotate enquanto arrasta
         dragControls.addEventListener('dragstart', function(event) {
             controls.autoRotate = false;
-            event.object.material.emissive.setHex(0x444444); // Destacar objeto sendo arrastado
-        });
-
-        dragControls.addEventListener('drag', function(event) {
-            // Pode adicionar efeitos durante o arrasto
+            event.object.material.emissive.setHex(0x444444);
         });
 
         dragControls.addEventListener('dragend', function(event) {
             controls.autoRotate = true;
-            event.object.material.emissive.setHex(0x111122); // Voltar ao normal
+            event.object.material.emissive.setHex(0x111122);
         });
 
-        // Raycaster para clique (seleção) - opcional
+        // Raycaster para clique
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
         renderer.domElement.addEventListener('click', (event) => {
-            // Calcular posição do mouse em coordenadas normalizadas
             mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
             mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-
-            // Verificar interseções com objetos interativos
             const intersects = raycaster.intersectObjects(interactiveObjects);
 
             if (intersects.length > 0) {
                 const selected = intersects[0].object;
-                // Feedback visual: piscar ou mudar cor
                 selected.material.emissive.setHex(0x88ff88);
                 setTimeout(() => {
                     selected.material.emissive.setHex(0x111122);
                 }, 200);
-                
                 console.log(`Selecionado: ${selected.userData.name} (${selected.userData.type})`);
             }
         });
 
         function animate() {
-            // As estrelas continuam girando automaticamente
             stars.rotation.y += 0.0001;
             stars.rotation.x += 0.00005;
             stars2.rotation.y -= 0.00008;
-            
-            // As partículas orbitais também continuam
             orbitalParticles.rotation.y += 0.002;
             
             controls.update();
@@ -839,7 +906,6 @@
             });
             document.getElementById('skill-page-' + skill).classList.add('active');
             
-            // Inicializar cena da habilidade se ainda não foi inicializada
             if (!window[`scene${skill}Initialized`]) {
                 window[`initSkill${skill}`]();
                 window[`scene${skill}Initialized`] = true;
@@ -856,7 +922,6 @@
             });
         };
 
-        // Tecla ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 document.querySelectorAll('.skill-page').forEach(page => {
@@ -866,7 +931,7 @@
         });
     </script>
 
-    <!-- Scripts individuais para cada habilidade (mantidos iguais) -->
+    <!-- Scripts individuais para cada habilidade -->
     <script type="module">
         // Java - Cubos flutuantes com gradiente
         window.initSkillJava = function() {
@@ -923,7 +988,6 @@
             animate();
         };
 
-        // CSS - Formas geométricas coloridas
         window.initSkillCSS = function() {
             const canvas = document.getElementById('canvas-css');
             const scene = new THREE.Scene();
@@ -985,7 +1049,6 @@
             animate();
         };
 
-        // HTML - Estrutura de grades e linhas
         window.initSkillHTML = function() {
             const canvas = document.getElementById('canvas-html');
             const scene = new THREE.Scene();
@@ -1044,7 +1107,6 @@
             animate();
         };
 
-        // JavaScript - Partículas e movimento
         window.initSkillJS = function() {
             const canvas = document.getElementById('canvas-js');
             const scene = new THREE.Scene();
@@ -1105,7 +1167,6 @@
             animate();
         };
 
-        // MySQL - Banco de dados com tabelas
         window.initSkillMySQL = function() {
             const canvas = document.getElementById('canvas-mysql');
             const scene = new THREE.Scene();
@@ -1170,7 +1231,6 @@
             animate();
         };
 
-        // Inicializar todas as cenas
         window.initSkillJava();
         window.initSkillCSS();
         window.initSkillHTML();
@@ -1182,6 +1242,331 @@
         window.scenehtmlInitialized = true;
         window.scenejsInitialized = true;
         window.scenemysqlInitialized = true;
+    </script>
+
+    <!-- Mini Game Script -->
+    <script>
+        // Função para abrir/fechar o jogo
+        window.toggleGame = function() {
+            const gameContainer = document.getElementById('gameContainer');
+            if (gameContainer.classList.contains('active')) {
+                gameContainer.classList.remove('active');
+            } else {
+                gameContainer.classList.add('active');
+                // Iniciar o jogo se não estiver rodando
+                if (!window.gameInitialized) {
+                    initGalagaGame();
+                    window.gameInitialized = true;
+                }
+            }
+        };
+
+        // Galaga Game
+        function initGalagaGame() {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Ajustar tamanho do canvas
+            canvas.width = 800;
+            canvas.height = 600;
+
+            // Jogador
+            const player = {
+                x: canvas.width / 2 - 25,
+                y: canvas.height - 80,
+                width: 50,
+                height: 40,
+                speed: 7,
+                lives: 3,
+                invulnerable: 0
+            };
+
+            // Tiros do jogador
+            const bullets = [];
+            const bulletSpeed = 8;
+            const bulletCooldown = 10;
+            let bulletTimer = 0;
+
+            // Inimigos
+            const enemies = [];
+            const enemyRows = 5;
+            const enemyCols = 8;
+            const enemyWidth = 40;
+            const enemyHeight = 30;
+            const enemySpacing = 20;
+            
+            // Direção do movimento dos inimigos
+            let enemyDirection = 1;
+            let enemyMoveDown = false;
+            let enemySpeed = 1.5;
+
+            // Tiros dos inimigos
+            const enemyBullets = [];
+            const enemyBulletSpeed = 5;
+
+            // Pontuação
+            let score = 0;
+
+            // Controles
+            const keys = {};
+
+            document.addEventListener('keydown', (e) => {
+                keys[e.key] = true;
+            });
+
+            document.addEventListener('keyup', (e) => {
+                keys[e.key] = false;
+            });
+
+            // Criar inimigos
+            function createEnemies() {
+                for (let row = 0; row < enemyRows; row++) {
+                    for (let col = 0; col < enemyCols; col++) {
+                        enemies.push({
+                            x: 100 + col * (enemyWidth + enemySpacing),
+                            y: 50 + row * (enemyHeight + enemySpacing),
+                            width: enemyWidth,
+                            height: enemyHeight,
+                            alive: true,
+                            type: row === 0 ? 2 : 1 // Inimigos do topo valem mais
+                        });
+                    }
+                }
+            }
+            createEnemies();
+
+            // Desenhar o jogador (nave estilo Galaga)
+            function drawPlayer() {
+                ctx.save();
+                if (player.invulnerable > 0) {
+                    ctx.globalAlpha = 0.5;
+                }
+                
+                // Desenhar nave do jogador
+                ctx.fillStyle = '#a0ffc0';
+                ctx.beginPath();
+                ctx.moveTo(player.x + player.width/2, player.y);
+                ctx.lineTo(player.x + player.width - 5, player.y + player.height);
+                ctx.lineTo(player.x + 5, player.y + player.height);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Asas
+                ctx.fillStyle = '#6a4eff';
+                ctx.fillRect(player.x, player.y + player.height - 10, 10, 10);
+                ctx.fillRect(player.x + player.width - 10, player.y + player.height - 10, 10, 10);
+                
+                ctx.restore();
+            }
+
+            // Desenhar inimigos
+            function drawEnemies() {
+                enemies.forEach(enemy => {
+                    if (!enemy.alive) return;
+                    
+                    ctx.fillStyle = enemy.type === 2 ? '#ff6a4e' : '#b79aff';
+                    
+                    // Corpo do inimigo
+                    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height - 5);
+                    
+                    // Cabeça
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(enemy.x + 10, enemy.y - 5, 5, 5);
+                    ctx.fillRect(enemy.x + 25, enemy.y - 5, 5, 5);
+                    
+                    // Olhos
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(enemy.x + 12, enemy.y - 4, 3, 3);
+                    ctx.fillRect(enemy.x + 27, enemy.y - 4, 3, 3);
+                });
+            }
+
+            // Desenhar tiros
+            function drawBullets() {
+                ctx.fillStyle = '#ffff00';
+                bullets.forEach(bullet => {
+                    ctx.fillRect(bullet.x, bullet.y, 3, 10);
+                });
+                
+                ctx.fillStyle = '#ff6a6a';
+                enemyBullets.forEach(bullet => {
+                    ctx.fillRect(bullet.x, bullet.y, 3, 10);
+                });
+            }
+
+            // Desenhar pontuação e vidas
+            function drawUI() {
+                ctx.fillStyle = '#a0ffc0';
+                ctx.font = '20px Orbitron';
+                ctx.fillText(`Pontos: ${score}`, 20, 40);
+                
+                ctx.fillStyle = '#ff6a6a';
+                for (let i = 0; i < player.lives; i++) {
+                    ctx.fillRect(20 + i * 30, 60, 20, 20);
+                }
+            }
+
+            // Atualizar lógica do jogo
+            function update() {
+                // Movimento do jogador
+                if (keys['ArrowLeft'] && player.x > 0) {
+                    player.x -= player.speed;
+                }
+                if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+                    player.x += player.speed;
+                }
+                if (keys[' '] && bulletTimer <= 0) {
+                    bullets.push({
+                        x: player.x + player.width/2 - 1.5,
+                        y: player.y
+                    });
+                    bulletTimer = bulletCooldown;
+                }
+
+                if (bulletTimer > 0) bulletTimer--;
+
+                // Atualizar tiros do jogador
+                for (let i = bullets.length - 1; i >= 0; i--) {
+                    bullets[i].y -= bulletSpeed;
+                    
+                    // Remover tiros fora da tela
+                    if (bullets[i].y < 0) {
+                        bullets.splice(i, 1);
+                        continue;
+                    }
+                    
+                    // Colisão com inimigos
+                    for (let j = enemies.length - 1; j >= 0; j--) {
+                        const enemy = enemies[j];
+                        if (!enemy.alive) continue;
+                        
+                        if (bullets[i] &&
+                            bullets[i].x > enemy.x &&
+                            bullets[i].x < enemy.x + enemy.width &&
+                            bullets[i].y > enemy.y &&
+                            bullets[i].y < enemy.y + enemy.height) {
+                            
+                            enemy.alive = false;
+                            bullets.splice(i, 1);
+                            score += enemy.type === 2 ? 50 : 20;
+                            break;
+                        }
+                    }
+                }
+
+                // Movimento dos inimigos
+                let edgeReached = false;
+                enemies.forEach(enemy => {
+                    if (!enemy.alive) return;
+                    
+                    enemy.x += enemySpeed * enemyDirection;
+                    
+                    if (enemy.x <= 0 || enemy.x >= canvas.width - enemyWidth) {
+                        edgeReached = true;
+                    }
+                });
+
+                if (edgeReached) {
+                    enemyDirection *= -1;
+                    enemies.forEach(enemy => {
+                        if (enemy.alive) {
+                            enemy.y += 20;
+                        }
+                    });
+                }
+
+                // Inimigos atiram
+                if (Math.random() < 0.02) {
+                    const aliveEnemies = enemies.filter(e => e.alive);
+                    if (aliveEnemies.length > 0) {
+                        const shooter = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+                        enemyBullets.push({
+                            x: shooter.x + enemyWidth/2 - 1.5,
+                            y: shooter.y + enemyHeight
+                        });
+                    }
+                }
+
+                // Atualizar tiros dos inimigos
+                for (let i = enemyBullets.length - 1; i >= 0; i--) {
+                    enemyBullets[i].y += enemyBulletSpeed;
+                    
+                    if (enemyBullets[i].y > canvas.height) {
+                        enemyBullets.splice(i, 1);
+                        continue;
+                    }
+                    
+                    // Colisão com o jogador
+                    if (player.invulnerable <= 0 &&
+                        enemyBullets[i].x > player.x &&
+                        enemyBullets[i].x < player.x + player.width &&
+                        enemyBullets[i].y > player.y &&
+                        enemyBullets[i].y < player.y + player.height) {
+                        
+                        player.lives--;
+                        player.invulnerable = 100;
+                        enemyBullets.splice(i, 1);
+                        
+                        if (player.lives <= 0) {
+                            // Game over
+                            resetGame();
+                        }
+                    }
+                }
+
+                if (player.invulnerable > 0) {
+                    player.invulnerable--;
+                }
+
+                // Verificar se todos os inimigos morreram
+                if (enemies.every(e => !e.alive)) {
+                    // Vitória - recriar inimigos
+                    enemies.length = 0;
+                    enemyBullets.length = 0;
+                    createEnemies();
+                    enemySpeed += 0.3;
+                }
+            }
+
+            function resetGame() {
+                player.lives = 3;
+                player.invulnerable = 0;
+                player.x = canvas.width / 2 - 25;
+                score = 0;
+                enemies.length = 0;
+                bullets.length = 0;
+                enemyBullets.length = 0;
+                enemySpeed = 1.5;
+                createEnemies();
+            }
+
+            function gameLoop() {
+                if (!document.getElementById('gameContainer').classList.contains('active')) {
+                    return;
+                }
+                
+                update();
+                
+                // Limpar tela
+                ctx.fillStyle = '#0a0a1a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Desenhar estrelas de fundo
+                for (let i = 0; i < 50; i++) {
+                    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5})`;
+                    ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1, 1);
+                }
+                
+                drawEnemies();
+                drawPlayer();
+                drawBullets();
+                drawUI();
+                
+                requestAnimationFrame(gameLoop);
+            }
+
+            gameLoop();
+        }
     </script>
 </body>
 </html>
