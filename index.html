@@ -12,7 +12,7 @@
             color: white;
         }
 
-        /* Overlay de conteúdo com glassmorphism - ajustado para evitar sobreposição */
+        /* Overlay de conteúdo com glassmorphism */
         .content {
             position: absolute;
             top: 0;
@@ -101,7 +101,7 @@
             100% { background-position: 100% 50%; }
         }
 
-        /* Container principal para organizar habilidades e projetos lado a lado */
+        /* Container principal */
         .main-container {
             display: flex;
             justify-content: space-between;
@@ -112,7 +112,7 @@
             gap: 1rem;
         }
 
-        /* Painel de habilidades - ajustado */
+        /* Painel de habilidades */
         .skills-panel {
             background: rgba(26, 20, 50, 0.5);
             backdrop-filter: blur(10px);
@@ -135,10 +135,6 @@
             background-clip: text;
             cursor: pointer;
             display: inline-block;
-        }
-
-        .skills-panel h2:hover {
-            filter: drop-shadow(0 0 15px #aaffaa);
         }
 
         .skill-cards {
@@ -168,12 +164,6 @@
             background: rgba(40, 30, 70, 0.8);
         }
 
-        .skill-card.active {
-            border: 2px solid #b0ffb0;
-            box-shadow: 0 0 40px #a0ffc0;
-            background: rgba(60, 40, 100, 0.9);
-        }
-
         .skill-emoji {
             font-size: 2.5rem;
             margin-bottom: 0.3rem;
@@ -193,7 +183,7 @@
             letter-spacing: 2px;
         }
 
-        /* Projetos - ajustado */
+        /* Projetos */
         .projects {
             background: rgba(30, 20, 60, 0.5);
             backdrop-filter: blur(10px);
@@ -277,30 +267,36 @@
             white-space: nowrap;
         }
 
-        /* Páginas de habilidades */
+        /* Páginas de habilidades - com canvas individuais */
         .skill-page {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(5, 5, 15, 0.95);
-            backdrop-filter: blur(15px);
             z-index: 100;
             display: none;
-            justify-content: center;
-            align-items: center;
             pointer-events: auto;
-            opacity: 0;
-            transition: opacity 0.4s ease;
         }
 
         .skill-page.active {
-            display: flex;
-            opacity: 1;
+            display: block;
+        }
+
+        .skill-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 101;
         }
 
         .skill-page-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: rgba(30, 20, 60, 0.7);
             border: 2px solid #a0ffc0;
             border-radius: 50px;
@@ -308,15 +304,17 @@
             max-width: 600px;
             width: 80%;
             box-shadow: 0 0 100px #6a4eff;
-            position: relative;
+            z-index: 102;
             animation: pageEntry 0.5s ease;
             max-height: 80vh;
             overflow-y: auto;
+            backdrop-filter: blur(5px);
+            pointer-events: auto;
         }
 
         @keyframes pageEntry {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .close-btn {
@@ -335,6 +333,7 @@
             justify-content: center;
             align-items: center;
             line-height: 1;
+            z-index: 103;
         }
 
         .close-btn:hover {
@@ -386,19 +385,12 @@
             transform: translateX(10px);
         }
 
-        /* Responsividade */
         @media (max-width: 1000px) {
             .main-title { font-size: 2.5rem; top: 12%; }
             .main-container { flex-direction: column; align-items: stretch; }
             .skills-panel { margin-right: 0; margin-bottom: 1rem; max-width: 100%; }
             .projects { max-width: 100%; }
             .content { padding: 1rem; }
-        }
-
-        @media (max-width: 600px) {
-            .main-title { font-size: 1.8rem; top: 10%; white-space: normal; }
-            .header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-            .skill-cards { justify-content: center; }
         }
     </style>
 </head>
@@ -412,9 +404,8 @@
 
         <h1 class="main-title">AURORA // MIDNIGHT</h1>
 
-        <!-- Container flex para organizar habilidades e projetos lado a lado -->
         <div class="main-container">
-            <!-- Painel de habilidades com cards -->
+            <!-- Painel de habilidades -->
             <div class="skills-panel">
                 <h2 onclick="showAllSkills()">⚡ habilidades ⚡</h2>
                 <div class="skill-cards">
@@ -485,11 +476,11 @@
         <div class="footer-note">✦ clique nos cards para explorar cada habilidade ✦</div>
     </div>
 
-    <!-- Páginas individuais de cada habilidade -->
-    <!-- Java Page -->
+    <!-- Páginas individuais de cada habilidade com canvas próprios -->
     <div id="skill-page-java" class="skill-page">
+        <canvas id="canvas-java" class="skill-canvas"></canvas>
+        <div class="close-btn" onclick="closeSkillPage('java')">&times;</div>
         <div class="skill-page-content">
-            <div class="close-btn" onclick="closeSkillPage('java')">&times;</div>
             <div class="skill-page-header">
                 <span>☕</span>
                 <span class="skill-page-title">Java</span>
@@ -505,10 +496,10 @@
         </div>
     </div>
 
-    <!-- CSS Page -->
     <div id="skill-page-css" class="skill-page">
+        <canvas id="canvas-css" class="skill-canvas"></canvas>
+        <div class="close-btn" onclick="closeSkillPage('css')">&times;</div>
         <div class="skill-page-content">
-            <div class="close-btn" onclick="closeSkillPage('css')">&times;</div>
             <div class="skill-page-header">
                 <span>🎨</span>
                 <span class="skill-page-title">CSS</span>
@@ -524,10 +515,10 @@
         </div>
     </div>
 
-    <!-- HTML Page -->
     <div id="skill-page-html" class="skill-page">
+        <canvas id="canvas-html" class="skill-canvas"></canvas>
+        <div class="close-btn" onclick="closeSkillPage('html')">&times;</div>
         <div class="skill-page-content">
-            <div class="close-btn" onclick="closeSkillPage('html')">&times;</div>
             <div class="skill-page-header">
                 <span>📄</span>
                 <span class="skill-page-title">HTML</span>
@@ -543,10 +534,10 @@
         </div>
     </div>
 
-    <!-- JavaScript Page -->
     <div id="skill-page-js" class="skill-page">
+        <canvas id="canvas-js" class="skill-canvas"></canvas>
+        <div class="close-btn" onclick="closeSkillPage('js')">&times;</div>
         <div class="skill-page-content">
-            <div class="close-btn" onclick="closeSkillPage('js')">&times;</div>
             <div class="skill-page-header">
                 <span>⚡</span>
                 <span class="skill-page-title">JavaScript</span>
@@ -562,10 +553,10 @@
         </div>
     </div>
 
-    <!-- MySQL Page -->
     <div id="skill-page-mysql" class="skill-page">
+        <canvas id="canvas-mysql" class="skill-canvas"></canvas>
+        <div class="close-btn" onclick="closeSkillPage('mysql')">&times;</div>
         <div class="skill-page-content">
-            <div class="close-btn" onclick="closeSkillPage('mysql')">&times;</div>
             <div class="skill-page-header">
                 <span>🗄️</span>
                 <span class="skill-page-title">MySQL</span>
@@ -581,7 +572,7 @@
         </div>
     </div>
 
-    <!-- Script Three.js -->
+    <!-- Script Three.js principal (fundo principal com galáxia completa) -->
     <script type="importmap">
         {
             "imports": {
@@ -591,7 +582,7 @@
     </script>
 
     <script type="module">
-        // Three.js - mantido igual, com pequeno ajuste na posição da câmera para melhor visibilidade
+        // Cena principal com galáxia completa (restaurada)
         import * as THREE from 'three';
         import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
 
@@ -618,6 +609,7 @@
         controls.minDistance = 5;
         controls.maxDistance = 25;
 
+        // Iluminação
         const ambientLight = new THREE.AmbientLight(0x404060);
         scene.add(ambientLight);
 
@@ -633,9 +625,9 @@
         backLight.position.set(0, 0, -10);
         scene.add(backLight);
 
-        // Estrelas
+        // GALÁXIA COMPLETA - Estrelas coloridas (Aurora Green e Midnight Violet)
         const starsGeometry = new THREE.BufferGeometry();
-        const starsCount = 2000;
+        const starsCount = 2500;
         const positions = new Float32Array(starsCount * 3);
         const colors = new Float32Array(starsCount * 3);
 
@@ -663,13 +655,14 @@
         starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        const starsMaterial = new THREE.PointsMaterial({ size: 0.2, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+        const starsMaterial = new THREE.PointsMaterial({ size: 0.25, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, sizeAttenuation: true });
         const stars = new THREE.Points(starsGeometry, starsMaterial);
         scene.add(stars);
 
+        // Segunda camada de estrelas (mais distantes)
         const starsGeometry2 = new THREE.BufferGeometry();
-        const positions2 = new Float32Array(1200 * 3);
-        for (let i = 0; i < 1200 * 3; i += 3) {
+        const positions2 = new Float32Array(1500 * 3);
+        for (let i = 0; i < 1500 * 3; i += 3) {
             const r = 60 + Math.random() * 50;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos((Math.random() * 2) - 1);
@@ -678,11 +671,11 @@
             positions2[i+2] = r * Math.cos(phi);
         }
         starsGeometry2.setAttribute('position', new THREE.BufferAttribute(positions2, 3));
-        const starsMaterial2 = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+        const starsMaterial2 = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, blending: THREE.AdditiveBlending, sizeAttenuation: true });
         const stars2 = new THREE.Points(starsGeometry2, starsMaterial2);
         scene.add(stars2);
 
-        // Formas
+        // Formas 3D flutuantes (mantidas)
         const shapesGroup = new THREE.Group();
 
         const knotGeo = new THREE.TorusKnotGeometry(1.0, 0.25, 100, 12);
@@ -719,7 +712,7 @@
 
         scene.add(shapesGroup);
 
-        // Orbitais
+        // Partículas orbitais
         const orbitalParticlesGeo = new THREE.BufferGeometry();
         const orbitalPositions = new Float32Array(300 * 3);
         for (let i = 0; i < 300; i++) {
@@ -752,6 +745,7 @@
             shapesGroup.rotation.y += 0.0015;
             shapesGroup.rotation.x += 0.0008;
             orbitalParticles.rotation.y += 0.002;
+            
             controls.update();
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
@@ -763,48 +757,357 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-    </script>
 
-    <!-- Script para controle das páginas de habilidade -->
-    <script>
-        function openSkillPage(skill) {
+        // Funções para abrir/fechar páginas
+        window.openSkillPage = function(skill) {
             document.querySelectorAll('.skill-page').forEach(page => {
                 page.classList.remove('active');
             });
-            const page = document.getElementById('skill-page-' + skill);
-            if (page) {
-                page.classList.add('active');
+            document.getElementById('skill-page-' + skill).classList.add('active');
+            
+            // Inicializar cena da habilidade se ainda não foi inicializada
+            if (!window[`scene${skill}Initialized`]) {
+                window[`initSkill${skill}`]();
+                window[`scene${skill}Initialized`] = true;
             }
-        }
+        };
 
-        function closeSkillPage(skill) {
-            const page = document.getElementById('skill-page-' + skill);
-            if (page) {
-                page.classList.remove('active');
-            }
-        }
+        window.closeSkillPage = function(skill) {
+            document.getElementById('skill-page-' + skill).classList.remove('active');
+        };
 
-        function showAllSkills() {
+        window.showAllSkills = function() {
             document.querySelectorAll('.skill-page').forEach(page => {
                 page.classList.remove('active');
             });
-        }
+        };
 
-        document.querySelectorAll('.skill-page').forEach(page => {
-            page.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-
-        document.addEventListener('keydown', function(e) {
+        // Tecla ESC
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 document.querySelectorAll('.skill-page').forEach(page => {
                     page.classList.remove('active');
                 });
             }
         });
+    </script>
+
+    <!-- Scripts individuais para cada habilidade -->
+    <script type="module">
+        // Java - Cubos flutuantes com gradiente
+        window.initSkillJava = function() {
+            const canvas = document.getElementById('canvas-java');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const light1 = new THREE.PointLight(0xffaa00, 1);
+            light1.position.set(2, 3, 4);
+            scene.add(light1);
+            
+            const light2 = new THREE.PointLight(0x0066ff, 1);
+            light2.position.set(-2, -1, 3);
+            scene.add(light2);
+            
+            const cubes = [];
+            for (let i = 0; i < 20; i++) {
+                const size = Math.random() * 0.5 + 0.3;
+                const geometry = new THREE.BoxGeometry(size, size, size);
+                const material = new THREE.MeshStandardMaterial({ 
+                    color: Math.random() > 0.5 ? 0xffaa33 : 0x3366ff,
+                    emissive: 0x111122,
+                    wireframe: Math.random() > 0.7
+                });
+                const cube = new THREE.Mesh(geometry, material);
+                
+                cube.position.x = (Math.random() - 0.5) * 8;
+                cube.position.y = (Math.random() - 0.5) * 8;
+                cube.position.z = (Math.random() - 0.5) * 5 - 2;
+                
+                cube.rotation.x = Math.random() * Math.PI;
+                cube.rotation.y = Math.random() * Math.PI;
+                
+                scene.add(cube);
+                cubes.push(cube);
+            }
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                cubes.forEach(cube => {
+                    cube.rotation.x += 0.005;
+                    cube.rotation.y += 0.007;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // CSS - Formas geométricas coloridas
+        window.initSkillCSS = function() {
+            const canvas = document.getElementById('canvas-css');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x2d1b3a);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 6;
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const colors = [0xff5733, 0x33ff57, 0x3357ff, 0xff33f1];
+            colors.forEach((color, i) => {
+                const light = new THREE.PointLight(color, 0.8);
+                light.position.set(Math.sin(i * 1.5) * 3, Math.cos(i * 1.5) * 3, 2);
+                scene.add(light);
+            });
+            
+            const shapes = [];
+            const geoms = [
+                new THREE.BoxGeometry(0.8, 0.8, 0.8),
+                new THREE.SphereGeometry(0.5, 16),
+                new THREE.TorusGeometry(0.5, 0.2, 16, 32),
+                new THREE.ConeGeometry(0.6, 1, 8),
+                new THREE.CylinderGeometry(0.5, 0.5, 1, 8)
+            ];
+            
+            for (let i = 0; i < 30; i++) {
+                const geom = geoms[Math.floor(Math.random() * geoms.length)];
+                const material = new THREE.MeshStandardMaterial({ 
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    emissive: 0x221133,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const mesh = new THREE.Mesh(geom, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 8;
+                mesh.position.y = (Math.random() - 0.5) * 8;
+                mesh.position.z = (Math.random() - 0.5) * 5;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                
+                scene.add(mesh);
+                shapes.push(mesh);
+            }
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                shapes.forEach(shape => {
+                    shape.rotation.x += 0.01;
+                    shape.rotation.y += 0.015;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // HTML - Estrutura de grades e linhas
+        window.initSkillHTML = function() {
+            const canvas = document.getElementById('canvas-html');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a2b3c);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 5, 10);
+            camera.lookAt(0, 0, 0);
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const gridHelper = new THREE.GridHelper(20, 20, 0xffaa00, 0x444444);
+            scene.add(gridHelper);
+            
+            const axesHelper = new THREE.AxesHelper(5);
+            scene.add(axesHelper);
+            
+            const boxes = [];
+            for (let i = 0; i < 15; i++) {
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x44aaff, wireframe: true });
+                const box = new THREE.Mesh(geometry, material);
+                
+                box.position.x = (Math.random() - 0.5) * 8;
+                box.position.y = (Math.random() - 0.5) * 8;
+                box.position.z = (Math.random() - 0.5) * 8;
+                
+                scene.add(box);
+                boxes.push(box);
+            }
+            
+            const points = [];
+            for (let i = 0; i < 5; i++) {
+                points.push(new THREE.Vector3(
+                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 6
+                ));
+            }
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffaa44 });
+            const line = new THREE.Line(lineGeometry, lineMaterial);
+            scene.add(line);
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                boxes.forEach(box => {
+                    box.rotation.x += 0.005;
+                    box.rotation.y += 0.005;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // JavaScript - Partículas e movimento
+        window.initSkillJS = function() {
+            const canvas = document.getElementById('canvas-js');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x221133);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 10;
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const particlesGeo = new THREE.BufferGeometry();
+            const count = 2000;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+            
+            for (let i = 0; i < count * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i+1] = (Math.random() - 0.5) * 20;
+                positions[i+2] = (Math.random() - 0.5) * 20;
+                
+                colors[i] = Math.random();
+                colors[i+1] = Math.random();
+                colors[i+2] = Math.random();
+            }
+            
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const particlesMat = new THREE.PointsMaterial({ size: 0.1, vertexColors: true, blending: THREE.AdditiveBlending });
+            const particles = new THREE.Points(particlesGeo, particlesMat);
+            scene.add(particles);
+            
+            const movingObjects = [];
+            for (let i = 0; i < 10; i++) {
+                const geom = new THREE.SphereGeometry(0.2, 8);
+                const mat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0x331100 });
+                const sphere = new THREE.Mesh(geom, mat);
+                sphere.userData = { speed: Math.random() * 0.02, angle: Math.random() * Math.PI * 2 };
+                scene.add(sphere);
+                movingObjects.push(sphere);
+            }
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particles.rotation.y += 0.001;
+                
+                movingObjects.forEach(obj => {
+                    obj.userData.angle += obj.userData.speed;
+                    obj.position.x = Math.sin(obj.userData.angle) * 4;
+                    obj.position.y = Math.cos(obj.userData.angle * 2) * 3;
+                    obj.position.z = Math.sin(obj.userData.angle * 1.5) * 4;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // MySQL - Banco de dados com tabelas
+        window.initSkillMySQL = function() {
+            const canvas = document.getElementById('canvas-mysql');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a1a2a);
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 3, 8);
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const tables = [];
+            for (let i = 0; i < 8; i++) {
+                const geom = new THREE.CylinderGeometry(0.8, 0.8, 0.3, 8);
+                const mat = new THREE.MeshStandardMaterial({ color: 0x3399ff, emissive: 0x001122 });
+                const table = new THREE.Mesh(geom, mat);
+                
+                table.position.x = (Math.random() - 0.5) * 6;
+                table.position.y = (Math.random() - 0.5) * 4;
+                table.position.z = (Math.random() - 0.5) * 4;
+                
+                scene.add(table);
+                tables.push(table);
+                
+                for (let j = 0; j < 5; j++) {
+                    const rowGeom = new THREE.SphereGeometry(0.1, 4);
+                    const rowMat = new THREE.MeshStandardMaterial({ color: 0x44ff44 });
+                    const row = new THREE.Mesh(rowGeom, rowMat);
+                    row.position.set(
+                        table.position.x + (Math.random() - 0.5) * 1.2,
+                        table.position.y + 0.2,
+                        table.position.z + (Math.random() - 0.5) * 1.2
+                    );
+                    scene.add(row);
+                }
+            }
+            
+            for (let i = 0; i < tables.length; i++) {
+                for (let j = i+1; j < tables.length; j++) {
+                    if (Math.random() > 0.6) {
+                        const points = [
+                            tables[i].position.clone(),
+                            tables[j].position.clone()
+                        ];
+                        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                        const lineMat = new THREE.LineBasicMaterial({ color: 0x44aaff });
+                        const line = new THREE.Line(lineGeo, lineMat);
+                        scene.add(line);
+                    }
+                }
+            }
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                tables.forEach(table => {
+                    table.rotation.y += 0.005;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // Inicializar todas as cenas
+        window.initSkillJava();
+        window.initSkillCSS();
+        window.initSkillHTML();
+        window.initSkillJS();
+        window.initSkillMySQL();
+        
+        window.scenejavaInitialized = true;
+        window.scenecssInitialized = true;
+        window.scenehtmlInitialized = true;
+        window.scenejsInitialized = true;
+        window.scenemysqlInitialized = true;
     </script>
 </body>
 </html>
