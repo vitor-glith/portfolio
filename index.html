@@ -95,17 +95,11 @@
             background-clip: text;
             animation: auroraShift 8s infinite alternate;
             filter: drop-shadow(0 0 40px #5f3bff);
-            cursor: pointer;
+            pointer-events: none;
             white-space: nowrap;
-            z-index: 15;
+            z-index: 5;
             margin: 0;
             text-shadow: 0 0 20px rgba(170, 255, 200, 0.5);
-            transition: transform 0.3s;
-        }
-
-        .main-title:hover {
-            transform: translateX(-50%) scale(1.1);
-            filter: drop-shadow(0 0 60px #a0ffc0);
         }
 
         @keyframes auroraShift {
@@ -154,6 +148,7 @@
             gap: 1rem;
             flex-wrap: wrap;
             justify-content: flex-start;
+            margin-bottom: 1rem;
         }
 
         .skill-card {
@@ -193,6 +188,32 @@
             font-size: 0.8rem;
             color: #b9bbff;
             letter-spacing: 2px;
+        }
+
+        /* Botão do Galaga */
+        .galaga-button {
+            background: linear-gradient(135deg, #a0ffc0, #6a4eff);
+            border: none;
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0a0a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px #a0ffc0;
+            margin-top: 1rem;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border: 2px solid #b0ffb0;
+        }
+
+        .galaga-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px #6a4eff;
+            background: linear-gradient(135deg, #b0ffd0, #7a5fff);
         }
 
         /* Projetos */
@@ -481,7 +502,7 @@
             <div class="tagline">full-stack · artist</div>
         </div>
 
-        <h1 class="main-title" onclick="toggleGame()"> PORTFOLIO </h1>
+        <h1 class="main-title">PORTFOLIO</h1>
 
         <div class="main-container">
             <!-- Painel de habilidades -->
@@ -514,6 +535,8 @@
                         <div class="skill-level">●●●●</div>
                     </div>
                 </div>
+                <!-- Botão do Galaga -->
+                <button class="galaga-button" onclick="toggleGame()">✦ GALAGAR ✦</button>
             </div>
 
             <!-- Projetos -->
@@ -557,7 +580,7 @@
 
     <!-- Mini Game Galaga Container -->
     <div id="gameContainer" class="game-container">
-        <div class="game-title">✦ GALAGA GALAXY ✦</div>
+        <div class="game-title">✦ GALAGAR ✦</div>
         <div class="game-close" onclick="toggleGame()">×</div>
         <canvas id="gameCanvas" class="game-canvas"></canvas>
     </div>
@@ -658,7 +681,7 @@
         </div>
     </div>
 
-    <!-- Script Three.js principal (fundo principal com galáxia completa e interatividade) -->
+    <!-- Script Three.js principal -->
     <script type="importmap">
         {
             "imports": {
@@ -668,7 +691,6 @@
     </script>
 
     <script type="module">
-        // Cena principal com galáxia completa e objetos interativos
         import * as THREE from 'three';
         import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
         import { DragControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/DragControls.js';
@@ -712,7 +734,7 @@
         backLight.position.set(0, 0, -10);
         scene.add(backLight);
 
-        // GALÁXIA COMPLETA - Estrelas coloridas (Aurora Green e Midnight Violet)
+        // GALÁXIA COMPLETA - Estrelas coloridas
         const starsGeometry = new THREE.BufferGeometry();
         const starsCount = 2500;
         const positions = new Float32Array(starsCount * 3);
@@ -746,7 +768,6 @@
         const stars = new THREE.Points(starsGeometry, starsMaterial);
         scene.add(stars);
 
-        // Segunda camada de estrelas (mais distantes)
         const starsGeometry2 = new THREE.BufferGeometry();
         const positions2 = new Float32Array(1500 * 3);
         for (let i = 0; i < 1500 * 3; i += 3) {
@@ -762,10 +783,8 @@
         const stars2 = new THREE.Points(starsGeometry2, starsMaterial2);
         scene.add(stars2);
 
-        // Array para armazenar objetos interativos
         const interactiveObjects = [];
 
-        // Formas 3D flutuantes (agora interativas)
         const shapesGroup = new THREE.Group();
 
         const knotGeo = new THREE.TorusKnotGeometry(1.0, 0.25, 100, 12);
@@ -812,7 +831,6 @@
 
         scene.add(shapesGroup);
 
-        // Cristais interativos
         const crystals = [];
         for (let i = 0; i < 20; i++) {
             const crystalGeo = new THREE.TetrahedronGeometry(0.15 + Math.random()*0.15);
@@ -831,7 +849,6 @@
             interactiveObjects.push(crystal);
         }
 
-        // Partículas orbitais (não interativas por serem muitas)
         const orbitalParticlesGeo = new THREE.BufferGeometry();
         const orbitalPositions = new Float32Array(300 * 3);
         for (let i = 0; i < 300; i++) {
@@ -846,10 +863,8 @@
         const orbitalParticles = new THREE.Points(orbitalParticlesGeo, orbitalParticlesMat);
         scene.add(orbitalParticles);
 
-        // Configurar DragControls para objetos interativos
         const dragControls = new DragControls(interactiveObjects, camera, renderer.domElement);
         
-        // Desabilitar auto-rotate enquanto arrasta
         dragControls.addEventListener('dragstart', function(event) {
             controls.autoRotate = false;
             event.object.material.emissive.setHex(0x444444);
@@ -860,7 +875,6 @@
             event.object.material.emissive.setHex(0x111122);
         });
 
-        // Raycaster para clique
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
@@ -877,7 +891,6 @@
                 setTimeout(() => {
                     selected.material.emissive.setHex(0x111122);
                 }, 200);
-                console.log(`Selecionado: ${selected.userData.name} (${selected.userData.type})`);
             }
         });
 
@@ -899,7 +912,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Funções para abrir/fechar páginas
         window.openSkillPage = function(skill) {
             document.querySelectorAll('.skill-page').forEach(page => {
                 page.classList.remove('active');
@@ -933,7 +945,6 @@
 
     <!-- Scripts individuais para cada habilidade -->
     <script type="module">
-        // Java - Cubos flutuantes com gradiente
         window.initSkillJava = function() {
             const canvas = document.getElementById('canvas-java');
             const scene = new THREE.Scene();
@@ -1246,14 +1257,12 @@
 
     <!-- Mini Game Script -->
     <script>
-        // Função para abrir/fechar o jogo
         window.toggleGame = function() {
             const gameContainer = document.getElementById('gameContainer');
             if (gameContainer.classList.contains('active')) {
                 gameContainer.classList.remove('active');
             } else {
                 gameContainer.classList.add('active');
-                // Iniciar o jogo se não estiver rodando
                 if (!window.gameInitialized) {
                     initGalagaGame();
                     window.gameInitialized = true;
@@ -1261,16 +1270,13 @@
             }
         };
 
-        // Galaga Game
         function initGalagaGame() {
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Ajustar tamanho do canvas
             canvas.width = 800;
             canvas.height = 600;
 
-            // Jogador
             const player = {
                 x: canvas.width / 2 - 25,
                 y: canvas.height - 80,
@@ -1281,13 +1287,11 @@
                 invulnerable: 0
             };
 
-            // Tiros do jogador
             const bullets = [];
             const bulletSpeed = 8;
             const bulletCooldown = 10;
             let bulletTimer = 0;
 
-            // Inimigos
             const enemies = [];
             const enemyRows = 5;
             const enemyCols = 8;
@@ -1295,19 +1299,14 @@
             const enemyHeight = 30;
             const enemySpacing = 20;
             
-            // Direção do movimento dos inimigos
             let enemyDirection = 1;
-            let enemyMoveDown = false;
             let enemySpeed = 1.5;
 
-            // Tiros dos inimigos
             const enemyBullets = [];
             const enemyBulletSpeed = 5;
 
-            // Pontuação
             let score = 0;
 
-            // Controles
             const keys = {};
 
             document.addEventListener('keydown', (e) => {
@@ -1318,7 +1317,6 @@
                 keys[e.key] = false;
             });
 
-            // Criar inimigos
             function createEnemies() {
                 for (let row = 0; row < enemyRows; row++) {
                     for (let col = 0; col < enemyCols; col++) {
@@ -1328,21 +1326,19 @@
                             width: enemyWidth,
                             height: enemyHeight,
                             alive: true,
-                            type: row === 0 ? 2 : 1 // Inimigos do topo valem mais
+                            type: row === 0 ? 2 : 1
                         });
                     }
                 }
             }
             createEnemies();
 
-            // Desenhar o jogador (nave estilo Galaga)
             function drawPlayer() {
                 ctx.save();
                 if (player.invulnerable > 0) {
                     ctx.globalAlpha = 0.5;
                 }
                 
-                // Desenhar nave do jogador
                 ctx.fillStyle = '#a0ffc0';
                 ctx.beginPath();
                 ctx.moveTo(player.x + player.width/2, player.y);
@@ -1351,7 +1347,6 @@
                 ctx.closePath();
                 ctx.fill();
                 
-                // Asas
                 ctx.fillStyle = '#6a4eff';
                 ctx.fillRect(player.x, player.y + player.height - 10, 10, 10);
                 ctx.fillRect(player.x + player.width - 10, player.y + player.height - 10, 10, 10);
@@ -1359,29 +1354,23 @@
                 ctx.restore();
             }
 
-            // Desenhar inimigos
             function drawEnemies() {
                 enemies.forEach(enemy => {
                     if (!enemy.alive) return;
                     
                     ctx.fillStyle = enemy.type === 2 ? '#ff6a4e' : '#b79aff';
-                    
-                    // Corpo do inimigo
                     ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height - 5);
                     
-                    // Cabeça
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(enemy.x + 10, enemy.y - 5, 5, 5);
                     ctx.fillRect(enemy.x + 25, enemy.y - 5, 5, 5);
                     
-                    // Olhos
                     ctx.fillStyle = '#000000';
                     ctx.fillRect(enemy.x + 12, enemy.y - 4, 3, 3);
                     ctx.fillRect(enemy.x + 27, enemy.y - 4, 3, 3);
                 });
             }
 
-            // Desenhar tiros
             function drawBullets() {
                 ctx.fillStyle = '#ffff00';
                 bullets.forEach(bullet => {
@@ -1394,7 +1383,6 @@
                 });
             }
 
-            // Desenhar pontuação e vidas
             function drawUI() {
                 ctx.fillStyle = '#a0ffc0';
                 ctx.font = '20px Orbitron';
@@ -1406,9 +1394,7 @@
                 }
             }
 
-            // Atualizar lógica do jogo
             function update() {
-                // Movimento do jogador
                 if (keys['ArrowLeft'] && player.x > 0) {
                     player.x -= player.speed;
                 }
@@ -1425,17 +1411,14 @@
 
                 if (bulletTimer > 0) bulletTimer--;
 
-                // Atualizar tiros do jogador
                 for (let i = bullets.length - 1; i >= 0; i--) {
                     bullets[i].y -= bulletSpeed;
                     
-                    // Remover tiros fora da tela
                     if (bullets[i].y < 0) {
                         bullets.splice(i, 1);
                         continue;
                     }
                     
-                    // Colisão com inimigos
                     for (let j = enemies.length - 1; j >= 0; j--) {
                         const enemy = enemies[j];
                         if (!enemy.alive) continue;
@@ -1454,7 +1437,6 @@
                     }
                 }
 
-                // Movimento dos inimigos
                 let edgeReached = false;
                 enemies.forEach(enemy => {
                     if (!enemy.alive) return;
@@ -1475,7 +1457,6 @@
                     });
                 }
 
-                // Inimigos atiram
                 if (Math.random() < 0.02) {
                     const aliveEnemies = enemies.filter(e => e.alive);
                     if (aliveEnemies.length > 0) {
@@ -1487,7 +1468,6 @@
                     }
                 }
 
-                // Atualizar tiros dos inimigos
                 for (let i = enemyBullets.length - 1; i >= 0; i--) {
                     enemyBullets[i].y += enemyBulletSpeed;
                     
@@ -1496,7 +1476,6 @@
                         continue;
                     }
                     
-                    // Colisão com o jogador
                     if (player.invulnerable <= 0 &&
                         enemyBullets[i].x > player.x &&
                         enemyBullets[i].x < player.x + player.width &&
@@ -1508,7 +1487,6 @@
                         enemyBullets.splice(i, 1);
                         
                         if (player.lives <= 0) {
-                            // Game over
                             resetGame();
                         }
                     }
@@ -1518,9 +1496,7 @@
                     player.invulnerable--;
                 }
 
-                // Verificar se todos os inimigos morreram
                 if (enemies.every(e => !e.alive)) {
-                    // Vitória - recriar inimigos
                     enemies.length = 0;
                     enemyBullets.length = 0;
                     createEnemies();
@@ -1547,11 +1523,9 @@
                 
                 update();
                 
-                // Limpar tela
                 ctx.fillStyle = '#0a0a1a';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // Desenhar estrelas de fundo
                 for (let i = 0; i < 50; i++) {
                     ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5})`;
                     ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1, 1);
