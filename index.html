@@ -579,7 +579,7 @@
         </div>
     </div>
 
-    <!-- Script Three.js principal (fundo principal com galáxia completa) -->
+    <!-- Script Three.js principal (fundo principal com galáxia completa e interatividade) -->
     <script type="importmap">
         {
             "imports": {
@@ -589,9 +589,10 @@
     </script>
 
     <script type="module">
-        // Cena principal com galáxia completa (restaurada)
+        // Cena principal com galáxia completa e objetos interativos
         import * as THREE from 'three';
         import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
+        import { DragControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/DragControls.js';
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0a0a1a);
@@ -682,20 +683,27 @@
         const stars2 = new THREE.Points(starsGeometry2, starsMaterial2);
         scene.add(stars2);
 
-        // Formas 3D flutuantes (mantidas)
+        // Array para armazenar objetos interativos
+        const interactiveObjects = [];
+
+        // Formas 3D flutuantes (agora interativas)
         const shapesGroup = new THREE.Group();
 
         const knotGeo = new THREE.TorusKnotGeometry(1.0, 0.25, 100, 12);
         const knotMat = new THREE.MeshStandardMaterial({ color: 0xa0ffc0, emissive: 0x224422, roughness: 0.3, metalness: 0.1, transparent: true, opacity: 0.95 });
         const knot = new THREE.Mesh(knotGeo, knotMat);
         knot.position.set(-1.5, 1.0, -1);
+        knot.userData = { name: 'Torus Knot', type: 'aurora' };
         shapesGroup.add(knot);
+        interactiveObjects.push(knot);
 
         const sphereGeo = new THREE.SphereGeometry(0.9, 48, 48);
         const sphereMat = new THREE.MeshStandardMaterial({ color: 0x9a7dff, emissive: 0x331a66, roughness: 0.2, metalness: 0.3, transparent: true, opacity: 0.9 });
         const sphere = new THREE.Mesh(sphereGeo, sphereMat);
         sphere.position.set(2.0, 0.5, 0.2);
+        sphere.userData = { name: 'Sphere', type: 'midnight' };
         shapesGroup.add(sphere);
+        interactiveObjects.push(sphere);
 
         const torusGeo = new THREE.TorusGeometry(1.2, 0.2, 24, 80);
         const torusMat = new THREE.MeshStandardMaterial({ color: 0xb0ffd0, emissive: 0x224422 });
@@ -703,23 +711,48 @@
         torus.position.set(0, -0.8, 1.8);
         torus.rotation.x = Math.PI / 2;
         torus.rotation.z = 0.5;
+        torus.userData = { name: 'Torus', type: 'aurora' };
         shapesGroup.add(torus);
+        interactiveObjects.push(torus);
 
         const icoGeo = new THREE.IcosahedronGeometry(0.9, 0);
         const icoMat = new THREE.MeshStandardMaterial({ color: 0xb284ff, emissive: 0x331a66, wireframe: true });
         const ico = new THREE.Mesh(icoGeo, icoMat);
         ico.position.set(-2.2, -0.8, -1.5);
+        ico.userData = { name: 'Icosahedron', type: 'midnight' };
         shapesGroup.add(ico);
+        interactiveObjects.push(ico);
 
         const cubeGeo = new THREE.BoxGeometry(1.1, 1.1, 1.1);
         const cubeMat = new THREE.MeshStandardMaterial({ color: 0xaaffcc, emissive: 0x225533 });
         const cube = new THREE.Mesh(cubeGeo, cubeMat);
         cube.position.set(2.5, -0.3, -1.5);
+        cube.userData = { name: 'Cube', type: 'aurora' };
         shapesGroup.add(cube);
+        interactiveObjects.push(cube);
 
         scene.add(shapesGroup);
 
-        // Partículas orbitais
+        // Cristais interativos
+        const crystals = [];
+        for (let i = 0; i < 20; i++) {
+            const crystalGeo = new THREE.TetrahedronGeometry(0.15 + Math.random()*0.15);
+            const crystalMat = new THREE.MeshStandardMaterial({ color: Math.random() > 0.5 ? 0xa0ffc0 : 0x9b7eff, emissive: 0x111122 });
+            const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+            const angle = (i / 20) * Math.PI * 2;
+            const radius = 4.5 + Math.random() * 1.5;
+            crystal.position.set(
+                Math.cos(angle) * radius,
+                (Math.random() - 0.5) * 3,
+                Math.sin(angle) * radius
+            );
+            crystal.userData = { name: `Crystal ${i+1}`, type: Math.random() > 0.5 ? 'aurora' : 'midnight' };
+            scene.add(crystal);
+            crystals.push(crystal);
+            interactiveObjects.push(crystal);
+        }
+
+        // Partículas orbitais (não interativas por serem muitas)
         const orbitalParticlesGeo = new THREE.BufferGeometry();
         const orbitalPositions = new Float32Array(300 * 3);
         for (let i = 0; i < 300; i++) {
@@ -734,23 +767,57 @@
         const orbitalParticles = new THREE.Points(orbitalParticlesGeo, orbitalParticlesMat);
         scene.add(orbitalParticles);
 
-        // Cristais
-        for (let i = 0; i < 20; i++) {
-            const crystalGeo = new THREE.TetrahedronGeometry(0.15 + Math.random()*0.15);
-            const crystalMat = new THREE.MeshStandardMaterial({ color: Math.random() > 0.5 ? 0xa0ffc0 : 0x9b7eff, emissive: 0x111122 });
-            const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-            const angle = (i / 20) * Math.PI * 2;
-            const radius = 4.5 + Math.random() * 1.5;
-            crystal.position.set(Math.cos(angle) * radius, (Math.random() - 0.5) * 3, Math.sin(angle) * radius);
-            scene.add(crystal);
-        }
+        // Configurar DragControls para objetos interativos
+        const dragControls = new DragControls(interactiveObjects, camera, renderer.domElement);
+        
+        // Desabilitar auto-rotate enquanto arrasta
+        dragControls.addEventListener('dragstart', function(event) {
+            controls.autoRotate = false;
+            event.object.material.emissive.setHex(0x444444); // Destacar objeto sendo arrastado
+        });
+
+        dragControls.addEventListener('drag', function(event) {
+            // Pode adicionar efeitos durante o arrasto
+        });
+
+        dragControls.addEventListener('dragend', function(event) {
+            controls.autoRotate = true;
+            event.object.material.emissive.setHex(0x111122); // Voltar ao normal
+        });
+
+        // Raycaster para clique (seleção) - opcional
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        renderer.domElement.addEventListener('click', (event) => {
+            // Calcular posição do mouse em coordenadas normalizadas
+            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+            mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            // Verificar interseções com objetos interativos
+            const intersects = raycaster.intersectObjects(interactiveObjects);
+
+            if (intersects.length > 0) {
+                const selected = intersects[0].object;
+                // Feedback visual: piscar ou mudar cor
+                selected.material.emissive.setHex(0x88ff88);
+                setTimeout(() => {
+                    selected.material.emissive.setHex(0x111122);
+                }, 200);
+                
+                console.log(`Selecionado: ${selected.userData.name} (${selected.userData.type})`);
+            }
+        });
 
         function animate() {
+            // As estrelas continuam girando automaticamente
             stars.rotation.y += 0.0001;
             stars.rotation.x += 0.00005;
             stars2.rotation.y -= 0.00008;
-            shapesGroup.rotation.y += 0.0015;
-            shapesGroup.rotation.x += 0.0008;
+            
+            // As partículas orbitais também continuam
             orbitalParticles.rotation.y += 0.002;
             
             controls.update();
@@ -799,7 +866,7 @@
         });
     </script>
 
-    <!-- Scripts individuais para cada habilidade -->
+    <!-- Scripts individuais para cada habilidade (mantidos iguais) -->
     <script type="module">
         // Java - Cubos flutuantes com gradiente
         window.initSkillJava = function() {
