@@ -681,7 +681,7 @@
         </div>
     </div>
 
-    <!-- Script Three.js principal -->
+    <!-- Script Three.js principal (mantido igual) -->
     <script type="importmap">
         {
             "imports": {
@@ -1255,7 +1255,7 @@
         window.scenemysqlInitialized = true;
     </script>
 
-    <!-- Mini Game Script -->
+    <!-- Mini Game Script com tecla S para atirar -->
     <script>
         window.toggleGame = function() {
             const gameContainer = document.getElementById('gameContainer');
@@ -1311,6 +1311,10 @@
 
             document.addEventListener('keydown', (e) => {
                 keys[e.key] = true;
+                // Prevenir comportamento padrão da tecla S (como rolar a página)
+                if (e.key === 's' || e.key === 'S') {
+                    e.preventDefault();
+                }
             });
 
             document.addEventListener('keyup', (e) => {
@@ -1392,6 +1396,11 @@
                 for (let i = 0; i < player.lives; i++) {
                     ctx.fillRect(20 + i * 30, 60, 20, 20);
                 }
+                
+                // Instrução da tecla S
+                ctx.fillStyle = '#a0ffc0';
+                ctx.font = '16px Orbitron';
+                ctx.fillText('Atirar: S', canvas.width - 150, 40);
             }
 
             function update() {
@@ -1401,7 +1410,8 @@
                 if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
                     player.x += player.speed;
                 }
-                if (keys[' '] && bulletTimer <= 0) {
+                // Tecla S para atirar (maiúscula ou minúscula)
+                if ((keys['s'] || keys['S']) && bulletTimer <= 0) {
                     bullets.push({
                         x: player.x + player.width/2 - 1.5,
                         y: player.y
