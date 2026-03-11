@@ -3,686 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio 3D | Habilidades Interativas</title>
-    <!-- Google Fonts para fontes tecnológicas -->
+    <title>Vitor Ferreira · portfólio imersivo</title>
+    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;800&family=Audiowide&family=Rajdhani:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <style>
-        body {
+        /* reset e base */
+        * {
             margin: 0;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Overlay de conteúdo com glassmorphism */
-        .content {
-            position: absolute;
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #F8F8FF;      /* Ghost White */
+            color: #2C1A5E;                  /* Persian Indigo */
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* canvas three.js ocupa fundo fixo */
+        #canvas-container {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
+            z-index: 0;
             pointer-events: none;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 1.5rem 2rem;
-            box-sizing: border-box;
-            text-shadow: 0 0 20px rgba(0,0,0,0.7);
         }
 
-        .header, .skills-panel, .projects {
-            pointer-events: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(18, 18, 30, 0.3);
-            backdrop-filter: blur(8px);
-            border-radius: 40px;
-            padding: 0.8rem 2rem;
-            border: 1px solid rgba(170, 255, 200, 0.3);
-            box-shadow: 0 0 30px rgba(100, 255, 180, 0.2);
-            max-width: 500px;
-            margin-bottom: 1rem;
+        /* overlay do conteúdo com fundo levemente translúcido */
+        .content {
             position: relative;
-            z-index: 20;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #a0ffd0, #6a4eff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-            filter: drop-shadow(0 0 20px #aaffaa);
-        }
-
-        .tagline {
-            color: #c0e0ff;
-            font-size: 1rem;
-            border-left: 2px solid #8f6eff;
-            padding-left: 1rem;
-        }
-
-        .main-title {
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            font-family: 'Orbitron', 'Audiowide', 'Rajdhani', sans-serif;
-            background: linear-gradient(135deg, #a8ffcf, #b79aff, #a8ffcf);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: auroraShift 8s infinite alternate;
-            filter: drop-shadow(0 0 40px #5f3bff);
-            pointer-events: none;
-            white-space: nowrap;
             z-index: 5;
-            margin: 0;
-            text-shadow: 0 0 20px rgba(170, 255, 200, 0.5);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2.5rem;
+            background-color: rgba(248, 248, 255, 0.65);
+            backdrop-filter: blur(3px);
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(44, 26, 94, 0.08);
+            border-left: 1px solid rgba(44, 26, 94, 0.1);
+            border-right: 1px solid rgba(44, 26, 94, 0.1);
         }
 
-        @keyframes auroraShift {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        h1, h2, h3 {
+            font-weight: 400;
+            letter-spacing: -0.02em;
         }
 
-        /* Container principal */
-        .main-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            width: 100%;
-            margin-top: auto;
-            margin-bottom: 1rem;
-            gap: 1rem;
+        h1 {
+            font-size: 4rem;
+            font-weight: 500;
+            line-height: 1.0;
+            margin-bottom: 0.5rem;
+            color: #2C1A5E;
+            text-shadow: 2px 2px 10px rgba(248, 248, 255, 0.7);
         }
 
-        /* Painel de habilidades */
-        .skills-panel {
-            background: rgba(26, 20, 50, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 1.5rem 2rem;
-            border: 1px solid #7a5fff;
-            box-shadow: 0 10px 30px rgba(0, 255, 200, 0.2);
-            max-width: 650px;
-            border-top: 2px solid #b0ffb0;
-            flex: 1;
-            margin-right: 1rem;
+        .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #3d2b68;
+            border-left: 3px solid #2C1A5E;
+            padding-left: 1.8rem;
+            margin-top: 0.2rem;
+            margin-bottom: 3.5rem;
         }
 
-        .skills-panel h2 {
-            margin: 0 0 1rem 0;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #b6ffb6, #c5adff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            cursor: pointer;
+        section {
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            position: relative;
             display: inline-block;
         }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #2C1A5E;
+        }
 
-        .skill-cards {
+        .skills-grid {
             display: flex;
-            gap: 1rem;
             flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-bottom: 1rem;
+            gap: 1.2rem;
+            margin: 2rem 0 1rem;
         }
 
-        .skill-card {
-            background: rgba(10, 10, 25, 0.7);
-            border-radius: 20px;
-            padding: 1rem 1.5rem;
-            min-width: 90px;
-            text-align: center;
-            border: 1px solid rgba(170, 255, 200, 0.3);
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            border-color: #a0ffc0;
-            box-shadow: 0 0 30px #8f6eff;
-            background: rgba(40, 30, 70, 0.8);
-        }
-
-        .skill-emoji {
-            font-size: 2.5rem;
-            margin-bottom: 0.3rem;
-            filter: drop-shadow(0 0 8px #aaffaa);
-        }
-
-        .skill-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #e0ffef;
-            margin-bottom: 0.2rem;
-        }
-
-        .skill-level {
-            font-size: 0.8rem;
-            color: #b9bbff;
-            letter-spacing: 2px;
-        }
-
-        /* Botão do Galaga */
-        .galaga-button {
-            background: linear-gradient(135deg, #a0ffc0, #6a4eff);
-            border: none;
-            border-radius: 30px;
-            padding: 1rem 2rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #0a0a1a;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 30px #a0ffc0;
-            margin-top: 1rem;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            border: 2px solid #b0ffb0;
-        }
-
-        .galaga-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 50px #6a4eff;
-            background: linear-gradient(135deg, #b0ffd0, #7a5fff);
-        }
-
-        /* Projetos */
-        .projects {
-            background: rgba(30, 20, 60, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 1.5rem 2rem;
-            border: 1px solid #aa99ff;
-            box-shadow: 0 10px 30px rgba(170, 130, 255, 0.3);
-            max-width: 380px;
-            border-bottom: 2px solid #b0ffb0;
-            flex: 0 0 auto;
-        }
-
-        .projects h2 {
-            margin: 0 0 1rem 0;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #adffd0, #c5adff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .project-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .project-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 40px;
-            border: 1px solid rgba(200, 180, 255, 0.3);
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .project-item:hover {
-            background: rgba(170, 255, 200, 0.2);
-            border-color: #aaffaa;
-            transform: translateX(5px);
-            box-shadow: 0 0 20px #b070ff;
-        }
-
-        .project-icon {
-            font-size: 1.5rem;
-        }
-
-        .project-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-title {
-            font-weight: 700;
-            color: #e0ffef;
-            font-size: 1rem;
-        }
-
-        .project-desc {
-            font-size: 0.75rem;
-            color: #b9bbff;
-        }
-
-        .footer-note {
-            position: absolute;
-            bottom: 0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            color: rgba(220, 240, 255, 0.6);
-            background: rgba(0,0,0,0.3);
-            padding: 0.2rem 1rem;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-            pointer-events: none;
-            z-index: 20;
-            white-space: nowrap;
-        }
-
-        /* Mini game Galaga */
-        .game-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 600px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 3px solid #a0ffc0;
-            border-radius: 20px;
-            z-index: 200;
-            display: none;
-            box-shadow: 0 0 50px #6a4eff;
-            backdrop-filter: blur(10px);
-        }
-
-        .game-container.active {
-            display: block;
-        }
-
-        .game-canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 17px;
-            background: #000;
-        }
-
-        .game-close {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            width: 40px;
-            height: 40px;
-            background: #a0ffc0;
-            border: 2px solid #6a4eff;
-            border-radius: 50%;
-            color: #0a0a1a;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s;
-            z-index: 201;
-        }
-
-        .game-close:hover {
-            transform: scale(1.2);
-            background: #ff6a6a;
-            color: white;
-        }
-
-        .game-title {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #a0ffc0;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px #6a4eff;
-            white-space: nowrap;
-        }
-
-        /* Páginas de habilidades - com canvas individuais */
-        .skill-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: 100;
-            display: none;
-            pointer-events: auto;
-        }
-
-        .skill-page.active {
-            display: block;
-        }
-
-        .skill-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 101;
-        }
-
-        .skill-page-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(30, 20, 60, 0.7);
-            border: 2px solid #a0ffc0;
+        .skill-item {
+            background: transparent;
+            border: 1.5px solid rgba(44, 26, 94, 0.25);
+            padding: 0.8rem 2.2rem;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #2C1A5E;
             border-radius: 50px;
-            padding: 2.5rem 3.5rem;
-            max-width: 600px;
-            width: 80%;
-            box-shadow: 0 0 100px #6a4eff;
-            z-index: 102;
-            animation: pageEntry 0.5s ease;
-            max-height: 80vh;
-            overflow-y: auto;
-            backdrop-filter: blur(5px);
-            pointer-events: auto;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(4px);
+            background-color: rgba(248, 248, 255, 0.4);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        @keyframes pageEntry {
-            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
-            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .skill-item:hover {
+            border-color: #2C1A5E;
+            background-color: rgba(44, 26, 94, 0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 18px -10px rgba(44, 26, 94, 0.2);
         }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
-            color: #a0ffc0;
-            cursor: pointer;
-            transition: transform 0.2s;
-            background: rgba(0,0,0,0.3);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .project-card {
+            background: rgba(248, 248, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(44, 26, 94, 0.18);
+            padding: 2rem 1.8rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(44, 26, 94, 0.1);
+        }
+
+        .project-card:hover {
+            border-color: #2C1A5E;
+            box-shadow: 0 25px 30px -12px rgba(44, 26, 94, 0.25);
+            transform: scale(1.02) translateY(-5px);
+            background: rgba(248, 248, 255, 0.85);
+        }
+
+        .project-card h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2C1A5E;
+        }
+
+        .project-card p {
+            font-size: 1rem;
+            color: #3f3170;
+            margin-bottom: 1.2rem;
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #2C1A5E;
+            border-bottom: 1.5px solid #2C1A5E;
+            padding-bottom: 0.2rem;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .footer {
+            margin-top: 5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(44, 26, 94, 0.2);
+            font-size: 0.95rem;
+            color: #4f3d7a;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            line-height: 1;
-            z-index: 103;
-        }
-
-        .close-btn:hover {
-            transform: rotate(90deg) scale(1.2);
-            color: #ffa0a0;
-            box-shadow: 0 0 20px #ff6a6a;
-        }
-
-        .skill-page-header {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .skill-page-title {
-            font-size: 2.2rem;
-            background: linear-gradient(135deg, #a0ffc0, #b79aff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .footer a {
+            color: #2C1A5E;
+            text-decoration: none;
+            border-bottom: 1px dotted transparent;
+            transition: border-color 0.2s;
+            font-weight: 400;
+        }
+        .footer a:hover {
+            border-color: #2C1A5E;
         }
 
-        .skill-page-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #e0e0ff;
-            margin: 1.5rem 0;
-        }
-
-        .skill-projects {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            margin-top: 1.5rem;
-        }
-
-        .skill-project-item {
-            background: rgba(255,255,255,0.05);
-            border-radius: 30px;
-            padding: 0.8rem 1.5rem;
-            border-left: 5px solid #a0ffc0;
-            transition: 0.2s;
-            font-size: 0.95rem;
-        }
-
-        .skill-project-item:hover {
-            background: rgba(160, 255, 200, 0.1);
-            transform: translateX(10px);
-        }
-
-        @media (max-width: 1000px) {
-            .main-title { font-size: 2.5rem; top: 12%; letter-spacing: 4px; }
-            .main-container { flex-direction: column; align-items: stretch; }
-            .skills-panel { margin-right: 0; margin-bottom: 1rem; max-width: 100%; }
-            .projects { max-width: 100%; }
-            .content { padding: 1rem; }
-            .game-container { width: 95%; height: auto; aspect-ratio: 4/3; }
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .content { padding: 1.8rem 1.2rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Overlay principal -->
-    <div class="content">
-        <div class="header">
-            <div class="logo" onclick="window.location.reload()">✦ KARMA ✦</div>
-            <div class="tagline">full-stack · artist</div>
-        </div>
 
-        <h1 class="main-title">PORTFOLIO <br></br>
-        Vitor Ferreira</h1>
-        
-        <div class="main-container">
-            <!-- Painel de habilidades -->
-            <div class="skills-panel">
-                <h2 onclick="showAllSkills()"> habilidades </h2>
-                <div class="skill-cards">
-                    <div class="skill-card" onclick="openSkillPage('java')">
-                        <div class="skill-emoji">☕</div>
-                        <div class="skill-name">Java</div>
-                        <div class="skill-level">●●●●</div>
-                    </div>
-                    <div class="skill-card" onclick="openSkillPage('css')">
-                        <div class="skill-emoji">🎨</div>
-                        <div class="skill-name">CSS</div>
-                        <div class="skill-level">●●●●</div>
-                    </div>
-                    <div class="skill-card" onclick="openSkillPage('html')">
-                        <div class="skill-emoji">📄</div>
-                        <div class="skill-name">HTML</div>
-                        <div class="skill-level">●●●●</div>
-                    </div>
-                    <div class="skill-card" onclick="openSkillPage('js')">
-                        <div class="skill-emoji">⚡</div>
-                        <div class="skill-name">JavaScript</div>
-                        <div class="skill-level">●●●●</div>
-                    </div>
-                    <div class="skill-card" onclick="openSkillPage('mysql')">
-                        <div class="skill-emoji">🗄️</div>
-                        <div class="skill-name">MySQL</div>
-                        <div class="skill-level">●●●●</div>
-                    </div>
-                </div>
-                <!-- Botão do Galaga -->
-                <button class="galaga-button" onclick="toggleGame()">✦ GALAGAR ✦</button>
+    <div id="canvas-container"></div>
+
+    <main class="content">
+        <header>
+            <h1>Vitor Ferreira</h1>
+            <div class="subtitle">desenvolvedor · design · craft</div>
+        </header>
+
+        <section>
+            <h2 class="section-title">habilidades</h2>
+            <div class="skills-grid">
+                <span class="skill-item">Java</span>
+                <span class="skill-item">CSS</span>
+                <span class="skill-item">HTML</span>
+                <span class="skill-item">JavaScript</span>
+                <span class="skill-item">MySQL</span>
             </div>
+            <p style="max-width: 550px; color: #3b2d5a; font-weight: 300; margin-top: 1.5rem; font-size: 1.1rem;">
+                desenvolvimento limpo, soluções elegantes — back-end robusto e front-end com propósito.
+            </p>
+        </section>
 
-            <!-- Projetos -->
-            <div class="projects">
-                <h2>📌 projetos em destaque</h2>
-                <div class="project-list">
-                    <div class="project-item">
-                        <div class="project-icon">🌌</div>
-                        <div class="project-info">
-                            <span class="project-title">Galactic Blog</span>
-                            <span class="project-desc">Java · Spring · MySQL</span>
-                        </div>
-                    </div>
-                    <div class="project-item">
-                        <div class="project-icon">🎨</div>
-                        <div class="project-info">
-                            <span class="project-title">Aurora UI Kit</span>
-                            <span class="project-desc">HTML · CSS · JS</span>
-                        </div>
-                    </div>
-                    <div class="project-item">
-                        <div class="project-icon">📊</div>
-                        <div class="project-info">
-                            <span class="project-title">Midnight Finance</span>
-                            <span class="project-desc">React · Node · MySQL</span>
-                        </div>
-                    </div>
-                    <div class="project-item">
-                        <div class="project-icon">🧬</div>
-                        <div class="project-info">
-                            <span class="project-title">3D Portfolio</span>
-                            <span class="project-desc">Three.js · WebGL</span>
-                        </div>
-                    </div>
+        <section>
+            <h2 class="section-title">projetos</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <span class="tag">web app</span>
+                    <h3>task flow</h3>
+                    <p>Gerenciador de tarefas com Java Spring e MySQL. Interface limpa e relatórios dinâmicos.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">front-end</span>
+                    <h3>portfolio 2015</h3>
+                    <p>Remake de design clássico com HTML, CSS e animações suaves em JS.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">biblioteca</span>
+                    <h3>simple query lib</h3>
+                    <p>Camada de abstração em Java para MySQL, reduzindo boilerplate.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">experimental</span>
+                    <h3>campos flutuantes</h3>
+                    <p>Visualização orgânica com Three.js — a base do fundo deste site.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="footer-note">✦ clique nos cards para explorar cada habilidade ✦</div>
-    </div>
+        <footer class="footer">
+            <span>© 2025 Vitor Ferreira</span>
+            <span>
+                <a href="#">github</a> · 
+                <a href="#">linkedin</a> · 
+                <a href="#">email</a>
+            </span>
+        </footer>
+    </main>
 
-    <!-- Mini Game Galaga Container -->
-    <div id="gameContainer" class="game-container">
-        <div class="game-title">✦ GALAGAR ✦</div>
-        <div class="game-close" onclick="toggleGame()">×</div>
-        <canvas id="gameCanvas" class="game-canvas"></canvas>
-    </div>
-
-    <!-- Páginas individuais de cada habilidade com canvas próprios -->
-    <div id="skill-page-java" class="skill-page">
-        <canvas id="canvas-java" class="skill-canvas"></canvas>
-        <div class="close-btn" onclick="closeSkillPage('java')">&times;</div>
-        <div class="skill-page-content">
-            <div class="skill-page-header">
-                <span>☕</span>
-                <span class="skill-page-title">Java</span>
-            </div>
-            <div class="skill-page-description">
-                Desenvolvimento back-end robusto com Java. Experiência em Spring Boot, APIs REST, microsserviços e integração com bancos de dados. Código limpo e escalável.
-            </div>
-            <div class="skill-projects">
-                <div class="skill-project-item">🔹 Galactic Blog - API REST com Spring e MySQL</div>
-                <div class="skill-project-item">🔹 Sistema de E-commerce com microsserviços</div>
-                <div class="skill-project-item">🔹 Aplicação de processamento de dados em tempo real</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="skill-page-css" class="skill-page">
-        <canvas id="canvas-css" class="skill-canvas"></canvas>
-        <div class="close-btn" onclick="closeSkillPage('css')">&times;</div>
-        <div class="skill-page-content">
-            <div class="skill-page-header">
-                <span>🎨</span>
-                <span class="skill-page-title">CSS</span>
-            </div>
-            <div class="skill-page-description">
-                Estilização avançada com CSS3, animações, flexbox, grid, design responsivo. Domínio de pré-processadores como SASS e frameworks como Tailwind.
-            </div>
-            <div class="skill-projects">
-                <div class="skill-project-item">🔹 Aurora UI Kit - Componentes reutilizáveis</div>
-                <div class="skill-project-item">🔹 Animações CSS para landing pages</div>
-                <div class="skill-project-item">🔹 Temas dark/light com variáveis CSS</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="skill-page-html" class="skill-page">
-        <canvas id="canvas-html" class="skill-canvas"></canvas>
-        <div class="close-btn" onclick="closeSkillPage('html')">&times;</div>
-        <div class="skill-page-content">
-            <div class="skill-page-header">
-                <span>📄</span>
-                <span class="skill-page-title">HTML</span>
-            </div>
-            <div class="skill-page-description">
-                Estruturação semântica de páginas web, acessibilidade (WCAG), SEO otimizado, integração com microdados e componentes customizados.
-            </div>
-            <div class="skill-projects">
-                <div class="skill-project-item">🔹 Portfólio pessoal com semântica avançada</div>
-                <div class="skill-project-item">🔹 Templates de e-mail marketing responsivos</div>
-                <div class="skill-project-item">🔹 Páginas estáticas para eventos</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="skill-page-js" class="skill-page">
-        <canvas id="canvas-js" class="skill-canvas"></canvas>
-        <div class="close-btn" onclick="closeSkillPage('js')">&times;</div>
-        <div class="skill-page-content">
-            <div class="skill-page-header">
-                <span>⚡</span>
-                <span class="skill-page-title">JavaScript</span>
-            </div>
-            <div class="skill-page-description">
-                JavaScript moderno (ES6+), manipulação de DOM, assincronismo, consumo de APIs, conceitos de React, Node.js e animações interativas com Three.js.
-            </div>
-            <div class="skill-projects">
-                <div class="skill-project-item">🔹 Dashboard interativo com gráficos em tempo real</div>
-                <div class="skill-project-item">🔹 Aplicação de clima com API externa</div>
-                <div class="skill-project-item">🔹 Jogo da memória em JS puro</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="skill-page-mysql" class="skill-page">
-        <canvas id="canvas-mysql" class="skill-canvas"></canvas>
-        <div class="close-btn" onclick="closeSkillPage('mysql')">&times;</div>
-        <div class="skill-page-content">
-            <div class="skill-page-header">
-                <span>🗄️</span>
-                <span class="skill-page-title">MySQL</span>
-            </div>
-            <div class="skill-page-description">
-                Modelagem de banco de dados relacional, consultas complexas com joins, otimização de queries, procedures, triggers e segurança de dados.
-            </div>
-            <div class="skill-projects">
-                <div class="skill-project-item">🔹 Sistema de gestão de estoque otimizado</div>
-                <div class="skill-project-item">🔹 Banco de dados para aplicação financeira</div>
-                <div class="skill-project-item">🔹 Migração e replicação de dados em larga escala</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script Three.js principal (mantido igual) -->
     <script type="importmap">
         {
             "imports": {
@@ -693,864 +270,219 @@
 
     <script type="module">
         import * as THREE from 'three';
-        import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
-        import { DragControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/DragControls.js';
+
+        // --- cena, câmera, renderer ---
+        const container = document.getElementById('canvas-container');
+        const width = window.innerWidth;
+        const height = window.innerHeight;
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a1a);
+        scene.background = new THREE.Color('#F8F8FF'); // Ghost White base
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(6, 2, 14);
+        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+        camera.position.set(0, 2, 18);
+        camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
 
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.6;
-        controls.enableZoom = true;
-        controls.enablePan = false;
-        controls.maxPolarAngle = Math.PI / 2.2;
-        controls.minDistance = 5;
-        controls.maxDistance = 25;
-
-        // Iluminação
-        const ambientLight = new THREE.AmbientLight(0x404060);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xb0a0ff, 1.2);
-        dirLight.position.set(2, 5, 5);
-        scene.add(dirLight);
-
-        const pointLight2 = new THREE.PointLight(0xa0ffc0, 0.8, 20);
-        pointLight2.position.set(-3, 2, 4);
-        scene.add(pointLight2);
-
-        const backLight = new THREE.PointLight(0x7a4dff, 0.5);
-        backLight.position.set(0, 0, -10);
-        scene.add(backLight);
-
-        // GALÁXIA COMPLETA - Estrelas coloridas
-        const starsGeometry = new THREE.BufferGeometry();
-        const starsCount = 2500;
-        const positions = new Float32Array(starsCount * 3);
-        const colors = new Float32Array(starsCount * 3);
-
-        for (let i = 0; i < starsCount * 3; i += 3) {
-            const r = 30 + Math.random() * 40;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos((Math.random() * 2) - 1);
-            
-            positions[i] = r * Math.sin(phi) * Math.cos(theta);
-            positions[i+1] = r * Math.sin(phi) * Math.sin(theta);
-            positions[i+2] = r * Math.cos(phi);
-
-            const isAurora = Math.random() > 0.5;
-            if (isAurora) {
-                colors[i] = 0.6 + Math.random() * 0.4;
-                colors[i+1] = 0.9 + Math.random() * 0.3;
-                colors[i+2] = 0.7 + Math.random() * 0.3;
-            } else {
-                colors[i] = 0.5 + Math.random() * 0.4;
-                colors[i+1] = 0.3 + Math.random() * 0.3;
-                colors[i+2] = 0.9 + Math.random() * 0.5;
-            }
-        }
-
-        starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const starsMaterial = new THREE.PointsMaterial({ size: 0.25, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, sizeAttenuation: true });
-        const stars = new THREE.Points(starsGeometry, starsMaterial);
-        scene.add(stars);
-
-        const starsGeometry2 = new THREE.BufferGeometry();
-        const positions2 = new Float32Array(1500 * 3);
-        for (let i = 0; i < 1500 * 3; i += 3) {
-            const r = 60 + Math.random() * 50;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos((Math.random() * 2) - 1);
-            positions2[i] = r * Math.sin(phi) * Math.cos(theta);
-            positions2[i+1] = r * Math.sin(phi) * Math.sin(theta);
-            positions2[i+2] = r * Math.cos(phi);
-        }
-        starsGeometry2.setAttribute('position', new THREE.BufferAttribute(positions2, 3));
-        const starsMaterial2 = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, blending: THREE.AdditiveBlending, sizeAttenuation: true });
-        const stars2 = new THREE.Points(starsGeometry2, starsMaterial2);
-        scene.add(stars2);
-
-        const interactiveObjects = [];
-
-        const shapesGroup = new THREE.Group();
-
-        const knotGeo = new THREE.TorusKnotGeometry(1.0, 0.25, 100, 12);
-        const knotMat = new THREE.MeshStandardMaterial({ color: 0xa0ffc0, emissive: 0x224422, roughness: 0.3, metalness: 0.1, transparent: true, opacity: 0.95 });
-        const knot = new THREE.Mesh(knotGeo, knotMat);
-        knot.position.set(-1.5, 1.0, -1);
-        knot.userData = { name: 'Torus Knot', type: 'aurora' };
-        shapesGroup.add(knot);
-        interactiveObjects.push(knot);
-
-        const sphereGeo = new THREE.SphereGeometry(0.9, 48, 48);
-        const sphereMat = new THREE.MeshStandardMaterial({ color: 0x9a7dff, emissive: 0x331a66, roughness: 0.2, metalness: 0.3, transparent: true, opacity: 0.9 });
-        const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-        sphere.position.set(2.0, 0.5, 0.2);
-        sphere.userData = { name: 'Sphere', type: 'midnight' };
-        shapesGroup.add(sphere);
-        interactiveObjects.push(sphere);
-
-        const torusGeo = new THREE.TorusGeometry(1.2, 0.2, 24, 80);
-        const torusMat = new THREE.MeshStandardMaterial({ color: 0xb0ffd0, emissive: 0x224422 });
-        const torus = new THREE.Mesh(torusGeo, torusMat);
-        torus.position.set(0, -0.8, 1.8);
-        torus.rotation.x = Math.PI / 2;
-        torus.rotation.z = 0.5;
-        torus.userData = { name: 'Torus', type: 'aurora' };
-        shapesGroup.add(torus);
-        interactiveObjects.push(torus);
-
-        const icoGeo = new THREE.IcosahedronGeometry(0.9, 0);
-        const icoMat = new THREE.MeshStandardMaterial({ color: 0xb284ff, emissive: 0x331a66, wireframe: true });
-        const ico = new THREE.Mesh(icoGeo, icoMat);
-        ico.position.set(-2.2, -0.8, -1.5);
-        ico.userData = { name: 'Icosahedron', type: 'midnight' };
-        shapesGroup.add(ico);
-        interactiveObjects.push(ico);
-
-        const cubeGeo = new THREE.BoxGeometry(1.1, 1.1, 1.1);
-        const cubeMat = new THREE.MeshStandardMaterial({ color: 0xaaffcc, emissive: 0x225533 });
-        const cube = new THREE.Mesh(cubeGeo, cubeMat);
-        cube.position.set(2.5, -0.3, -1.5);
-        cube.userData = { name: 'Cube', type: 'aurora' };
-        shapesGroup.add(cube);
-        interactiveObjects.push(cube);
-
-        scene.add(shapesGroup);
-
-        const crystals = [];
-        for (let i = 0; i < 20; i++) {
-            const crystalGeo = new THREE.TetrahedronGeometry(0.15 + Math.random()*0.15);
-            const crystalMat = new THREE.MeshStandardMaterial({ color: Math.random() > 0.5 ? 0xa0ffc0 : 0x9b7eff, emissive: 0x111122 });
-            const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-            const angle = (i / 20) * Math.PI * 2;
-            const radius = 4.5 + Math.random() * 1.5;
-            crystal.position.set(
-                Math.cos(angle) * radius,
-                (Math.random() - 0.5) * 3,
-                Math.sin(angle) * radius
-            );
-            crystal.userData = { name: `Crystal ${i+1}`, type: Math.random() > 0.5 ? 'aurora' : 'midnight' };
-            scene.add(crystal);
-            crystals.push(crystal);
-            interactiveObjects.push(crystal);
-        }
-
-        const orbitalParticlesGeo = new THREE.BufferGeometry();
-        const orbitalPositions = new Float32Array(300 * 3);
-        for (let i = 0; i < 300; i++) {
-            const angle = (i / 300) * Math.PI * 2;
-            const radius = 3.2;
-            orbitalPositions[i*3] = Math.cos(angle) * radius;
-            orbitalPositions[i*3+1] = Math.sin(angle * 2) * 1.2;
-            orbitalPositions[i*3+2] = Math.sin(angle) * radius;
-        }
-        orbitalParticlesGeo.setAttribute('position', new THREE.BufferAttribute(orbitalPositions, 3));
-        const orbitalParticlesMat = new THREE.PointsMaterial({ color: 0xccb3ff, size: 0.1, blending: THREE.AdditiveBlending });
-        const orbitalParticles = new THREE.Points(orbitalParticlesGeo, orbitalParticlesMat);
-        scene.add(orbitalParticles);
-
-        const dragControls = new DragControls(interactiveObjects, camera, renderer.domElement);
+        // --- NOVO FUNDO: ondas suaves + partículas brilhantes (mais bonito e orgânico) ---
         
-        dragControls.addEventListener('dragstart', function(event) {
-            controls.autoRotate = false;
-            event.object.material.emissive.setHex(0x444444);
-        });
+        // 1. Adicionar neblina suave para profundidade
+        scene.fog = new THREE.FogExp2('#F8F8FF', 0.025);
 
-        dragControls.addEventListener('dragend', function(event) {
-            controls.autoRotate = true;
-            event.object.material.emissive.setHex(0x111122);
-        });
+        // 2. Camada de ondas/linhas curvas (usando um mesh grande com geometria personalizada)
+        // Vamos criar uma série de linhas sinuosas horizontais com pontos de controle
+        const waveCount = 18;
+        const pointsPerWave = 80;
+        const waveColor = 0x2C1A5E; // Persian Indigo
 
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
+        for (let j = 0; j < waveCount; j++) {
+            const positions = [];
+            const indices = [];
+            const colors = [];
 
-        renderer.domElement.addEventListener('click', (event) => {
-            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-            mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(interactiveObjects);
-
-            if (intersects.length > 0) {
-                const selected = intersects[0].object;
-                selected.material.emissive.setHex(0x88ff88);
-                setTimeout(() => {
-                    selected.material.emissive.setHex(0x111122);
-                }, 200);
+            const yBase = (j - waveCount/2) * 1.1; // espaçamento vertical
+            const amplitude = 0.8 + Math.random() * 1.2;
+            const frequency = 0.5 + Math.random() * 0.4;
+            const speedFactor = 0.2 + Math.random() * 0.3; // será usado na animação
+            
+            // Gerar pontos da linha (como uma polyline)
+            for (let i = 0; i <= pointsPerWave; i++) {
+                const t = i / pointsPerWave; // 0 a 1
+                const x = (t - 0.5) * 28; // espalha horizontalmente
+                // onda senoidal + pequena variação
+                const z = Math.sin(t * Math.PI * 2 * frequency) * amplitude * 1.5 
+                        + Math.cos(t * Math.PI * 3) * 0.3;
+                
+                positions.push(x, yBase + Math.sin(t * Math.PI) * 0.5, z);
+                
+                // cores variam entre ghost white e persian indigo com transparência
+                const mix = 0.3 + 0.5 * Math.sin(t * Math.PI * 2); // varia entre 0.2 e 0.8
+                const r = 0.172 * mix; // 2C1A5E em RGB: 44,26,94 -> 0.172,0.102,0.369
+                const g = 0.102 * mix;
+                const b = 0.369 * mix;
+                colors.push(r, g, b);
             }
+
+            // Criar geometria de linha (LineSegments ou Line)
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            // Para conectar pontos em sequência, criamos índices de linha
+            for (let i = 0; i < pointsPerWave; i++) {
+                indices.push(i, i + 1);
+            }
+            geometry.setIndex(indices);
+            
+            const material = new THREE.LineBasicMaterial({ 
+                vertexColors: true, 
+                transparent: true, 
+                opacity: 0.18,
+                linewidth: 1 // (webgl limitação, mas ok)
+            });
+            
+            const waveLine = new THREE.LineSegments(geometry, material);
+            waveLine.userData = { speed: speedFactor, offset: Math.random() * 100, amplitude, frequency };
+            scene.add(waveLine);
+        }
+
+        // 3. Partículas brilhantes (pontos delicados) para dar um aspecto de poeira cósmica / luzes
+        const particleCount = 1200;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount; i++) {
+            // distribuição em um volume elíptico
+            const r = 12 + Math.random() * 15; // distância radial
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1); // esférica
+            
+            const x = r * Math.sin(phi) * Math.cos(theta);
+            const y = r * Math.sin(phi) * Math.sin(theta) * 0.6; // achatamento vertical
+            const z = r * Math.cos(phi);
+            
+            particlePositions[i*3] = x;
+            particlePositions[i*3+1] = y;
+            particlePositions[i*3+2] = z;
+            
+            // cores: variações de Persian Indigo e tons claros
+            const isIndigo = Math.random() > 0.4;
+            if (isIndigo) {
+                particleColors[i*3] = 0.27;   // 2C1A5E
+                particleColors[i*3+1] = 0.16;
+                particleColors[i*3+2] = 0.58;
+            } else {
+                particleColors[i*3] = 0.95;   // quase branco
+                particleColors[i*3+1] = 0.95;
+                particleColors[i*3+2] = 1.0;
+            }
+        }
+
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+        const particleMat = new THREE.PointsMaterial({ 
+            size: 0.15, 
+            vertexColors: true, 
+            transparent: true, 
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            map: createParticleTexture() // textura circular suave
         });
+
+        function createParticleTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(8, 8, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-atop';
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.beginPath();
+            ctx.arc(8, 8, 4, 0, 2 * Math.PI);
+            ctx.fill();
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        // 4. Adicionar algumas formas orgânicas extras (poucas nuvens de pontos com brilho)
+        const extraParticlesGeo = new THREE.BufferGeometry();
+        const extraPos = [];
+        for (let i = 0; i < 400; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const rad = 5 + Math.random() * 20;
+            const x = Math.cos(angle) * rad * 1.2;
+            const y = (Math.random() - 0.5) * 12;
+            const z = Math.sin(angle) * rad * 1.2;
+            extraPos.push(x, y, z);
+        }
+        extraParticlesGeo.setAttribute('position', new THREE.Float32BufferAttribute(extraPos, 3));
+        const extraMat = new THREE.PointsMaterial({ color: 0x2C1A5E, size: 0.12, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending });
+        const extraParticles = new THREE.Points(extraParticlesGeo, extraMat);
+        scene.add(extraParticles);
+
+        // --- animação suave e orgânica ---
+        let clock = new THREE.Clock();
 
         function animate() {
-            stars.rotation.y += 0.0001;
-            stars.rotation.x += 0.00005;
-            stars2.rotation.y -= 0.00008;
-            orbitalParticles.rotation.y += 0.002;
-            
-            controls.update();
-            renderer.render(scene, camera);
             requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+            const elapsedTime = performance.now() * 0.001; // seconds
+
+            // mover as ondas (linhas) suavemente ao longo do tempo
+            scene.traverse(obj => {
+                if (obj.isLineSegments && obj.userData.speed !== undefined) {
+                    // deslocar pontos da linha no eixo Z baseado em seno
+                    const positions = obj.geometry.attributes.position.array;
+                    const count = positions.length / 3;
+                    // pequena deformação temporal: move nós de forma senoidal
+                    for (let i = 0; i < count; i++) {
+                        // índice do ponto original (precisamos de uma referência, mas vamos fazer de forma simples: ondular baseado em x)
+                        const ix = i * 3;
+                        const x = positions[ix];
+                        const yBase = positions[ix + 1]; // armazenamos? melhor não perder referencia, então usamos onda original
+                        // aplicamos modulação suave no eixo Z
+                        // Como não guardamos o z original, recalculamos? Não é ideal, então faremos uma animação global de rotação muito lenta.
+                    }
+                    // alternativa: rotacionar levemente o grupo todo ou usar ruído. Vamos optar por uma rotação global lenta das linhas + partículas
+                }
+            });
+
+            // Movimento global: todo o cenário rotaciona infinitesimalmente
+            // Isso dá uma sensação orgânica, como se o observador flutuasse
+            scene.rotation.y += 0.0002;
+            scene.rotation.x = Math.sin(elapsedTime * 0.1) * 0.02;
+            
+            // as partículas adicionais têm rotação própria
+            particles.rotation.y += 0.0005;
+            particles.rotation.x += 0.0003;
+            
+            extraParticles.rotation.y -= 0.0004;
+            extraParticles.rotation.z += 0.0001;
+
+            renderer.render(scene, camera);
         }
+
         animate();
 
-        window.addEventListener('resize', () => {
+        // --- redimensionamento ---
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        window.openSkillPage = function(skill) {
-            document.querySelectorAll('.skill-page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById('skill-page-' + skill).classList.add('active');
-            
-            if (!window[`scene${skill}Initialized`]) {
-                window[`initSkill${skill}`]();
-                window[`scene${skill}Initialized`] = true;
-            }
-        };
-
-        window.closeSkillPage = function(skill) {
-            document.getElementById('skill-page-' + skill).classList.remove('active');
-        };
-
-        window.showAllSkills = function() {
-            document.querySelectorAll('.skill-page').forEach(page => {
-                page.classList.remove('active');
-            });
-        };
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.skill-page').forEach(page => {
-                    page.classList.remove('active');
-                });
-            }
-        });
-    </script>
-
-    <!-- Scripts individuais para cada habilidade -->
-    <script type="module">
-        window.initSkillJava = function() {
-            const canvas = document.getElementById('canvas-java');
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1a2e);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const light1 = new THREE.PointLight(0xffaa00, 1);
-            light1.position.set(2, 3, 4);
-            scene.add(light1);
-            
-            const light2 = new THREE.PointLight(0x0066ff, 1);
-            light2.position.set(-2, -1, 3);
-            scene.add(light2);
-            
-            const cubes = [];
-            for (let i = 0; i < 20; i++) {
-                const size = Math.random() * 0.5 + 0.3;
-                const geometry = new THREE.BoxGeometry(size, size, size);
-                const material = new THREE.MeshStandardMaterial({ 
-                    color: Math.random() > 0.5 ? 0xffaa33 : 0x3366ff,
-                    emissive: 0x111122,
-                    wireframe: Math.random() > 0.7
-                });
-                const cube = new THREE.Mesh(geometry, material);
-                
-                cube.position.x = (Math.random() - 0.5) * 8;
-                cube.position.y = (Math.random() - 0.5) * 8;
-                cube.position.z = (Math.random() - 0.5) * 5 - 2;
-                
-                cube.rotation.x = Math.random() * Math.PI;
-                cube.rotation.y = Math.random() * Math.PI;
-                
-                scene.add(cube);
-                cubes.push(cube);
-            }
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                cubes.forEach(cube => {
-                    cube.rotation.x += 0.005;
-                    cube.rotation.y += 0.007;
-                });
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-        };
-
-        window.initSkillCSS = function() {
-            const canvas = document.getElementById('canvas-css');
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x2d1b3a);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 6;
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const colors = [0xff5733, 0x33ff57, 0x3357ff, 0xff33f1];
-            colors.forEach((color, i) => {
-                const light = new THREE.PointLight(color, 0.8);
-                light.position.set(Math.sin(i * 1.5) * 3, Math.cos(i * 1.5) * 3, 2);
-                scene.add(light);
-            });
-            
-            const shapes = [];
-            const geoms = [
-                new THREE.BoxGeometry(0.8, 0.8, 0.8),
-                new THREE.SphereGeometry(0.5, 16),
-                new THREE.TorusGeometry(0.5, 0.2, 16, 32),
-                new THREE.ConeGeometry(0.6, 1, 8),
-                new THREE.CylinderGeometry(0.5, 0.5, 1, 8)
-            ];
-            
-            for (let i = 0; i < 30; i++) {
-                const geom = geoms[Math.floor(Math.random() * geoms.length)];
-                const material = new THREE.MeshStandardMaterial({ 
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    emissive: 0x221133,
-                    transparent: true,
-                    opacity: 0.8
-                });
-                const mesh = new THREE.Mesh(geom, material);
-                
-                mesh.position.x = (Math.random() - 0.5) * 8;
-                mesh.position.y = (Math.random() - 0.5) * 8;
-                mesh.position.z = (Math.random() - 0.5) * 5;
-                
-                mesh.rotation.x = Math.random() * Math.PI;
-                mesh.rotation.y = Math.random() * Math.PI;
-                
-                scene.add(mesh);
-                shapes.push(mesh);
-            }
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                shapes.forEach(shape => {
-                    shape.rotation.x += 0.01;
-                    shape.rotation.y += 0.015;
-                });
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-        };
-
-        window.initSkillHTML = function() {
-            const canvas = document.getElementById('canvas-html');
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a2b3c);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(5, 5, 10);
-            camera.lookAt(0, 0, 0);
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const gridHelper = new THREE.GridHelper(20, 20, 0xffaa00, 0x444444);
-            scene.add(gridHelper);
-            
-            const axesHelper = new THREE.AxesHelper(5);
-            scene.add(axesHelper);
-            
-            const boxes = [];
-            for (let i = 0; i < 15; i++) {
-                const geometry = new THREE.BoxGeometry(1, 1, 1);
-                const material = new THREE.MeshBasicMaterial({ color: 0x44aaff, wireframe: true });
-                const box = new THREE.Mesh(geometry, material);
-                
-                box.position.x = (Math.random() - 0.5) * 8;
-                box.position.y = (Math.random() - 0.5) * 8;
-                box.position.z = (Math.random() - 0.5) * 8;
-                
-                scene.add(box);
-                boxes.push(box);
-            }
-            
-            const points = [];
-            for (let i = 0; i < 5; i++) {
-                points.push(new THREE.Vector3(
-                    (Math.random() - 0.5) * 6,
-                    (Math.random() - 0.5) * 6,
-                    (Math.random() - 0.5) * 6
-                ));
-            }
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-            const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffaa44 });
-            const line = new THREE.Line(lineGeometry, lineMaterial);
-            scene.add(line);
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                boxes.forEach(box => {
-                    box.rotation.x += 0.005;
-                    box.rotation.y += 0.005;
-                });
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-        };
-
-        window.initSkillJS = function() {
-            const canvas = document.getElementById('canvas-js');
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x221133);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 10;
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const particlesGeo = new THREE.BufferGeometry();
-            const count = 2000;
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-            
-            for (let i = 0; i < count * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 20;
-                positions[i+1] = (Math.random() - 0.5) * 20;
-                positions[i+2] = (Math.random() - 0.5) * 20;
-                
-                colors[i] = Math.random();
-                colors[i+1] = Math.random();
-                colors[i+2] = Math.random();
-            }
-            
-            particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particlesGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
-            const particlesMat = new THREE.PointsMaterial({ size: 0.1, vertexColors: true, blending: THREE.AdditiveBlending });
-            const particles = new THREE.Points(particlesGeo, particlesMat);
-            scene.add(particles);
-            
-            const movingObjects = [];
-            for (let i = 0; i < 10; i++) {
-                const geom = new THREE.SphereGeometry(0.2, 8);
-                const mat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0x331100 });
-                const sphere = new THREE.Mesh(geom, mat);
-                sphere.userData = { speed: Math.random() * 0.02, angle: Math.random() * Math.PI * 2 };
-                scene.add(sphere);
-                movingObjects.push(sphere);
-            }
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                particles.rotation.y += 0.001;
-                
-                movingObjects.forEach(obj => {
-                    obj.userData.angle += obj.userData.speed;
-                    obj.position.x = Math.sin(obj.userData.angle) * 4;
-                    obj.position.y = Math.cos(obj.userData.angle * 2) * 3;
-                    obj.position.z = Math.sin(obj.userData.angle * 1.5) * 4;
-                });
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-        };
-
-        window.initSkillMySQL = function() {
-            const canvas = document.getElementById('canvas-mysql');
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a1a2a);
-            
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(5, 3, 8);
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const tables = [];
-            for (let i = 0; i < 8; i++) {
-                const geom = new THREE.CylinderGeometry(0.8, 0.8, 0.3, 8);
-                const mat = new THREE.MeshStandardMaterial({ color: 0x3399ff, emissive: 0x001122 });
-                const table = new THREE.Mesh(geom, mat);
-                
-                table.position.x = (Math.random() - 0.5) * 6;
-                table.position.y = (Math.random() - 0.5) * 4;
-                table.position.z = (Math.random() - 0.5) * 4;
-                
-                scene.add(table);
-                tables.push(table);
-                
-                for (let j = 0; j < 5; j++) {
-                    const rowGeom = new THREE.SphereGeometry(0.1, 4);
-                    const rowMat = new THREE.MeshStandardMaterial({ color: 0x44ff44 });
-                    const row = new THREE.Mesh(rowGeom, rowMat);
-                    row.position.set(
-                        table.position.x + (Math.random() - 0.5) * 1.2,
-                        table.position.y + 0.2,
-                        table.position.z + (Math.random() - 0.5) * 1.2
-                    );
-                    scene.add(row);
-                }
-            }
-            
-            for (let i = 0; i < tables.length; i++) {
-                for (let j = i+1; j < tables.length; j++) {
-                    if (Math.random() > 0.6) {
-                        const points = [
-                            tables[i].position.clone(),
-                            tables[j].position.clone()
-                        ];
-                        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-                        const lineMat = new THREE.LineBasicMaterial({ color: 0x44aaff });
-                        const line = new THREE.Line(lineGeo, lineMat);
-                        scene.add(line);
-                    }
-                }
-            }
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                tables.forEach(table => {
-                    table.rotation.y += 0.005;
-                });
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-        };
-
-        window.initSkillJava();
-        window.initSkillCSS();
-        window.initSkillHTML();
-        window.initSkillJS();
-        window.initSkillMySQL();
-        
-        window.scenejavaInitialized = true;
-        window.scenecssInitialized = true;
-        window.scenehtmlInitialized = true;
-        window.scenejsInitialized = true;
-        window.scenemysqlInitialized = true;
-    </script>
-
-    <!-- Mini Game Script com tecla S para atirar -->
-    <script>
-        window.toggleGame = function() {
-            const gameContainer = document.getElementById('gameContainer');
-            if (gameContainer.classList.contains('active')) {
-                gameContainer.classList.remove('active');
-            } else {
-                gameContainer.classList.add('active');
-                if (!window.gameInitialized) {
-                    initGalagaGame();
-                    window.gameInitialized = true;
-                }
-            }
-        };
-
-        function initGalagaGame() {
-            const canvas = document.getElementById('gameCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = 800;
-            canvas.height = 600;
-
-            const player = {
-                x: canvas.width / 2 - 25,
-                y: canvas.height - 80,
-                width: 50,
-                height: 40,
-                speed: 7,
-                lives: 3,
-                invulnerable: 0
-            };
-
-            const bullets = [];
-            const bulletSpeed = 8;
-            const bulletCooldown = 10;
-            let bulletTimer = 0;
-
-            const enemies = [];
-            const enemyRows = 5;
-            const enemyCols = 8;
-            const enemyWidth = 40;
-            const enemyHeight = 30;
-            const enemySpacing = 20;
-            
-            let enemyDirection = 1;
-            let enemySpeed = 1.5;
-
-            const enemyBullets = [];
-            const enemyBulletSpeed = 5;
-
-            let score = 0;
-
-            const keys = {};
-
-            document.addEventListener('keydown', (e) => {
-                keys[e.key] = true;
-                // Prevenir comportamento padrão da tecla S (como rolar a página)
-                if (e.key === 's' || e.key === 'S') {
-                    e.preventDefault();
-                }
-            });
-
-            document.addEventListener('keyup', (e) => {
-                keys[e.key] = false;
-            });
-
-            function createEnemies() {
-                for (let row = 0; row < enemyRows; row++) {
-                    for (let col = 0; col < enemyCols; col++) {
-                        enemies.push({
-                            x: 100 + col * (enemyWidth + enemySpacing),
-                            y: 50 + row * (enemyHeight + enemySpacing),
-                            width: enemyWidth,
-                            height: enemyHeight,
-                            alive: true,
-                            type: row === 0 ? 2 : 1
-                        });
-                    }
-                }
-            }
-            createEnemies();
-
-            function drawPlayer() {
-                ctx.save();
-                if (player.invulnerable > 0) {
-                    ctx.globalAlpha = 0.5;
-                }
-                
-                ctx.fillStyle = '#a0ffc0';
-                ctx.beginPath();
-                ctx.moveTo(player.x + player.width/2, player.y);
-                ctx.lineTo(player.x + player.width - 5, player.y + player.height);
-                ctx.lineTo(player.x + 5, player.y + player.height);
-                ctx.closePath();
-                ctx.fill();
-                
-                ctx.fillStyle = '#6a4eff';
-                ctx.fillRect(player.x, player.y + player.height - 10, 10, 10);
-                ctx.fillRect(player.x + player.width - 10, player.y + player.height - 10, 10, 10);
-                
-                ctx.restore();
-            }
-
-            function drawEnemies() {
-                enemies.forEach(enemy => {
-                    if (!enemy.alive) return;
-                    
-                    ctx.fillStyle = enemy.type === 2 ? '#ff6a4e' : '#b79aff';
-                    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height - 5);
-                    
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(enemy.x + 10, enemy.y - 5, 5, 5);
-                    ctx.fillRect(enemy.x + 25, enemy.y - 5, 5, 5);
-                    
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(enemy.x + 12, enemy.y - 4, 3, 3);
-                    ctx.fillRect(enemy.x + 27, enemy.y - 4, 3, 3);
-                });
-            }
-
-            function drawBullets() {
-                ctx.fillStyle = '#ffff00';
-                bullets.forEach(bullet => {
-                    ctx.fillRect(bullet.x, bullet.y, 3, 10);
-                });
-                
-                ctx.fillStyle = '#ff6a6a';
-                enemyBullets.forEach(bullet => {
-                    ctx.fillRect(bullet.x, bullet.y, 3, 10);
-                });
-            }
-
-            function drawUI() {
-                ctx.fillStyle = '#a0ffc0';
-                ctx.font = '20px Orbitron';
-                ctx.fillText(`Pontos: ${score}`, 20, 40);
-                
-                ctx.fillStyle = '#ff6a6a';
-                for (let i = 0; i < player.lives; i++) {
-                    ctx.fillRect(20 + i * 30, 60, 20, 20);
-                }
-                
-                // Instrução da tecla S
-                ctx.fillStyle = '#a0ffc0';
-                ctx.font = '16px Orbitron';
-                ctx.fillText('Atirar: S', canvas.width - 150, 40);
-            }
-
-            function update() {
-                if (keys['ArrowLeft'] && player.x > 0) {
-                    player.x -= player.speed;
-                }
-                if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
-                    player.x += player.speed;
-                }
-                // Tecla S para atirar (maiúscula ou minúscula)
-                if ((keys['s'] || keys['S']) && bulletTimer <= 0) {
-                    bullets.push({
-                        x: player.x + player.width/2 - 1.5,
-                        y: player.y
-                    });
-                    bulletTimer = bulletCooldown;
-                }
-
-                if (bulletTimer > 0) bulletTimer--;
-
-                for (let i = bullets.length - 1; i >= 0; i--) {
-                    bullets[i].y -= bulletSpeed;
-                    
-                    if (bullets[i].y < 0) {
-                        bullets.splice(i, 1);
-                        continue;
-                    }
-                    
-                    for (let j = enemies.length - 1; j >= 0; j--) {
-                        const enemy = enemies[j];
-                        if (!enemy.alive) continue;
-                        
-                        if (bullets[i] &&
-                            bullets[i].x > enemy.x &&
-                            bullets[i].x < enemy.x + enemy.width &&
-                            bullets[i].y > enemy.y &&
-                            bullets[i].y < enemy.y + enemy.height) {
-                            
-                            enemy.alive = false;
-                            bullets.splice(i, 1);
-                            score += enemy.type === 2 ? 50 : 20;
-                            break;
-                        }
-                    }
-                }
-
-                let edgeReached = false;
-                enemies.forEach(enemy => {
-                    if (!enemy.alive) return;
-                    
-                    enemy.x += enemySpeed * enemyDirection;
-                    
-                    if (enemy.x <= 0 || enemy.x >= canvas.width - enemyWidth) {
-                        edgeReached = true;
-                    }
-                });
-
-                if (edgeReached) {
-                    enemyDirection *= -1;
-                    enemies.forEach(enemy => {
-                        if (enemy.alive) {
-                            enemy.y += 20;
-                        }
-                    });
-                }
-
-                if (Math.random() < 0.02) {
-                    const aliveEnemies = enemies.filter(e => e.alive);
-                    if (aliveEnemies.length > 0) {
-                        const shooter = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
-                        enemyBullets.push({
-                            x: shooter.x + enemyWidth/2 - 1.5,
-                            y: shooter.y + enemyHeight
-                        });
-                    }
-                }
-
-                for (let i = enemyBullets.length - 1; i >= 0; i--) {
-                    enemyBullets[i].y += enemyBulletSpeed;
-                    
-                    if (enemyBullets[i].y > canvas.height) {
-                        enemyBullets.splice(i, 1);
-                        continue;
-                    }
-                    
-                    if (player.invulnerable <= 0 &&
-                        enemyBullets[i].x > player.x &&
-                        enemyBullets[i].x < player.x + player.width &&
-                        enemyBullets[i].y > player.y &&
-                        enemyBullets[i].y < player.y + player.height) {
-                        
-                        player.lives--;
-                        player.invulnerable = 100;
-                        enemyBullets.splice(i, 1);
-                        
-                        if (player.lives <= 0) {
-                            resetGame();
-                        }
-                    }
-                }
-
-                if (player.invulnerable > 0) {
-                    player.invulnerable--;
-                }
-
-                if (enemies.every(e => !e.alive)) {
-                    enemies.length = 0;
-                    enemyBullets.length = 0;
-                    createEnemies();
-                    enemySpeed += 0.3;
-                }
-            }
-
-            function resetGame() {
-                player.lives = 3;
-                player.invulnerable = 0;
-                player.x = canvas.width / 2 - 25;
-                score = 0;
-                enemies.length = 0;
-                bullets.length = 0;
-                enemyBullets.length = 0;
-                enemySpeed = 1.5;
-                createEnemies();
-            }
-
-            function gameLoop() {
-                if (!document.getElementById('gameContainer').classList.contains('active')) {
-                    return;
-                }
-                
-                update();
-                
-                ctx.fillStyle = '#0a0a1a';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                for (let i = 0; i < 50; i++) {
-                    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5})`;
-                    ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1, 1);
-                }
-                
-                drawEnemies();
-                drawPlayer();
-                drawBullets();
-                drawUI();
-                
-                requestAnimationFrame(gameLoop);
-            }
-
-            gameLoop();
         }
     </script>
 </body>
