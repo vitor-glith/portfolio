@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones sociais (opcional mas elegante) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* reset e base */
         * {
@@ -171,6 +173,58 @@
             font-weight: 500;
         }
 
+        /* NOVO: seção de links sociais aprimorada */
+        .social-links-section {
+            margin-bottom: 2rem;
+            background: rgba(248, 248, 255, 0.5);
+            border-radius: 28px;
+            padding: 1.2rem 2rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(44, 26, 94, 0.15);
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(44, 26, 94, 0.08);
+            padding: 0.75rem 1.8rem;
+            border-radius: 48px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            color: #2C1A5E;
+            border: 1px solid rgba(44, 26, 94, 0.25);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(4px);
+            letter-spacing: -0.2px;
+        }
+
+        .social-btn i {
+            font-size: 1.4rem;
+            transition: transform 0.2s ease;
+        }
+
+        .social-btn:hover {
+            background: #2C1A5E;
+            color: #F8F8FF;
+            border-color: #2C1A5E;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 18px -8px rgba(44, 26, 94, 0.35);
+        }
+
+        .social-btn:hover i {
+            transform: scale(1.05);
+        }
+
         .footer {
             margin-top: 5rem;
             padding-top: 2.5rem;
@@ -197,6 +251,16 @@
         @media (max-width: 600px) {
             h1 { font-size: 3rem; }
             .content { padding: 1.8rem 1.2rem; }
+            .social-buttons { gap: 1rem; justify-content: center; }
+            .social-btn { padding: 0.55rem 1.2rem; font-size: 0.9rem; }
+        }
+
+        /* badge sutil para contato */
+        .contact-note {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #5e4b8b;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -207,8 +271,29 @@
     <main class="content">
         <header>
             <h1>Vitor Ferreira</h1>
-            <div class="subtitle">desenvolvedor · design</div>
+            <div class="subtitle">desenvolvedor · design & inovação</div>
         </header>
+
+        <!-- NOVA SEÇÃO: Links sociais com espaços para LinkedIn e GitHub -->
+        <div class="social-links-section">
+            <div class="social-buttons">
+                <!-- Link GitHub com espaço definido e ícone -->
+                <a href="https://github.com/vitor-glith" target="_blank" rel="noopener noreferrer" class="social-btn" id="github-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <!-- Link LinkedIn com espaço dedicado -->
+                <a href="https://www.linkedin.com/in/vitor-ferreira-dev" target="_blank" rel="noopener noreferrer" class="social-btn" id="linkedin-link">
+                    <i class="fab fa-linkedin-in"></i> LinkedIn
+                </a>
+                <!-- Espaço extra para email (opcional mas integrado) -->
+                <a href="mailto:vitor.ferreira@exemplo.com" class="social-btn" id="email-link">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+            </div>
+            <div class="contact-note">
+                <i class="fas fa-share-alt"></i> Conecte-se comigo — aberto para colaborações e oportunidades
+            </div>
+        </div>
 
         <section>
             <h2 class="section-title">habilidades</h2>
@@ -218,9 +303,11 @@
                 <span class="skill-item">HTML</span>
                 <span class="skill-item">JavaScript</span>
                 <span class="skill-item">MySQL</span>
+                <span class="skill-item">React (aprendendo)</span>
             </div>
             <p style="max-width: 550px; color: #3b2d5a; font-weight: 300; margin-top: 1.5rem; font-size: 1.1rem;">
-                      Desenvolvedor junior em HTML, Java, CSS.           </p>
+                      Desenvolvedor junior em HTML, Java, CSS e apaixonado por criar experiências digitais elegantes.
+            </p>
         </section>
 
         <section>
@@ -228,23 +315,29 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <span class="tag"> sistema </span>
-                    <h3>events menager</h3>
-                    <p>Organizador de eventos simples e prático.</p>
+                    <h3>events manager</h3>
+                    <p>Organizador de eventos simples e prático. Interface clean e integração com banco de dados.</p>
                 </div>
                 <div class="project-card">
                     <span class="tag">front-end</span>
-                    <h3>projeto Nike e-commerce</h3>
-                    <p>Remake de design de site.</p>
+                    <h3>Nike e-commerce UI</h3>
+                    <p>Remake de design de site com foco em animações suaves e responsividade.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">fullstack</span>
+                    <h3>taskflow</h3>
+                    <p>App de tarefas com autenticação e dashboard interativo (em desenvolvimento).</p>
                 </div>
             </div>
         </section>
 
         <footer class="footer">
-            <span>© 2026 Vitor Ferreira</span>
+            <span>© 2026 Vitor Ferreira — portfólio imersivo</span>
             <span>
-                <a href="#">https://github.com/vitor-glith</a> · 
-                <a href="#">linkedin</a> · 
-                <a href="#">email</a>
+                <!-- footer também mantém acesso rápido aos links -->
+                <a href="https://github.com/vitor-glith" target="_blank">github</a> · 
+                <a href="https://www.linkedin.com/in/vitor-ferreira-dev" target="_blank">linkedin</a> · 
+                <a href="mailto:vitor.ferreira@exemplo.com">email</a>
             </span>
         </footer>
     </main>
@@ -283,7 +376,6 @@
         scene.fog = new THREE.FogExp2('#F8F8FF', 0.025);
 
         // 2. Camada de ondas/linhas curvas (usando um mesh grande com geometria personalizada)
-        // Vamos criar uma série de linhas sinuosas horizontais com pontos de controle
         const waveCount = 18;
         const pointsPerWave = 80;
         const waveColor = 0x2C1A5E; // Persian Indigo
@@ -426,29 +518,8 @@
 
         function animate() {
             requestAnimationFrame(animate);
-
-            const delta = clock.getDelta();
             const elapsedTime = performance.now() * 0.001; // seconds
-
-            // mover as ondas (linhas) suavemente ao longo do tempo
-            scene.traverse(obj => {
-                if (obj.isLineSegments && obj.userData.speed !== undefined) {
-                    // deslocar pontos da linha no eixo Z baseado em seno
-                    const positions = obj.geometry.attributes.position.array;
-                    const count = positions.length / 3;
-                    // pequena deformação temporal: move nós de forma senoidal
-                    for (let i = 0; i < count; i++) {
-                        // índice do ponto original (precisamos de uma referência, mas vamos fazer de forma simples: ondular baseado em x)
-                        const ix = i * 3;
-                        const x = positions[ix];
-                        const yBase = positions[ix + 1]; // armazenamos? melhor não perder referencia, então usamos onda original
-                        // aplicamos modulação suave no eixo Z
-                        // Como não guardamos o z original, recalculamos? Não é ideal, então faremos uma animação global de rotação muito lenta.
-                    }
-                    // alternativa: rotacionar levemente o grupo todo ou usar ruído. Vamos optar por uma rotação global lenta das linhas + partículas
-                }
-            });
-
+            
             // Movimento global: todo o cenário rotaciona infinitesimalmente
             // Isso dá uma sensação orgânica, como se o observador flutuasse
             scene.rotation.y += 0.0002;
@@ -460,6 +531,18 @@
             
             extraParticles.rotation.y -= 0.0004;
             extraParticles.rotation.z += 0.0001;
+
+            // Pequeno movimento dinâmico em algumas linhas para um toque extra de vida
+            scene.traverse(obj => {
+                if (obj.isLineSegments && obj.userData.speed !== undefined) {
+                    // modulação opcional: pequena variação de opacidade (efeito de respiração)
+                    const mat = obj.material;
+                    if (mat && mat.transparent) {
+                        const newOpacity = 0.15 + Math.sin(elapsedTime * 0.6 + obj.userData.speed * 10) * 0.05;
+                        mat.opacity = Math.min(0.28, Math.max(0.1, newOpacity));
+                    }
+                }
+            });
 
             renderer.render(scene, camera);
         }
@@ -473,6 +556,9 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
+        
+        // small console hint (apenas elegância)
+        console.log("✨ Portfólio Vitor Ferreira — Links GitHub e LinkedIn adicionados com sucesso!");
     </script>
 </body>
 </html>
