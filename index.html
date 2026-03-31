@@ -405,27 +405,6 @@
             transform: scale(1.05);
         }
 
-        .screenshot-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .screenshot-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
-
-        .screenshot-placeholder span {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
         .screenshot-caption {
             padding: 1rem;
             background: white;
@@ -435,7 +414,102 @@
             border-top: 1px solid rgba(44, 26, 94, 0.1);
         }
 
-        /* Modal para visualizar imagem ampliada */
+        /* Estilo para página do TaskFlow */
+        .taskflow-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .taskflow-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2C1A5E;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .collection-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(44, 26, 94, 0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(44, 26, 94, 0.1);
+        }
+
+        .collection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px -10px rgba(44, 26, 94, 0.25);
+        }
+
+        .collection-img {
+            height: 200px;
+            background: linear-gradient(135deg, #2C1A5E 0%, #5a3d8c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .collection-img i {
+            font-size: 4rem;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .collection-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .collection-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2C1A5E;
+        }
+
+        .collection-info p {
+            color: #5e4b8b;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2C1A5E;
+            margin-bottom: 1rem;
+        }
+
+        .btn-canva {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #2C1A5E;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-canva:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -10px rgba(44, 26, 94, 0.4);
+            background: #3d2a6b;
+        }
+
+        .btn-canva i {
+            font-size: 1.2rem;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -583,6 +657,9 @@
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Controle de visibilidade das páginas */
@@ -641,8 +718,8 @@
 
         <section>
             <h2 class="section-title">projetos</h2>
-          
-                <!-- Card do Nike e-commerce UI com função JavaScript para abrir detalhes -->
+            <div class="projects-grid">
+                <!-- Card do Nike e-commerce UI -->
                 <div class="project-card" onclick="showProjectDetail()">
                     <span class="tag">front-end</span>
                     <h3>Nike e-commerce UI</h3>
@@ -652,7 +729,17 @@
                         <i class="fas fa-arrow-right"></i>
                     </div>
                 </div>
-                
+
+                <!-- PROJETO TaskFlow - Marca de Roupas -->
+                <div class="project-card" onclick="showTaskFlow()">
+                    <span class="tag">design</span>
+                    <h3>TaskFlow · Coleção</h3>
+                    <p>Marca de roupas com designs exclusivos criados no Canva.</p>
+                    <div style="margin-top: 1rem; font-size: 0.85rem; color: #2C1A5E; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>👕 Ver coleção</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -669,7 +756,6 @@
     <!-- PÁGINA DE DETALHES DO PROJETO NIKE -->
     <main class="content page" id="page-project-detail">
         <div class="project-detail-container">
-            <!-- Botão para voltar ao portfólio -->
             <button onclick="showHome()" class="back-button">
                 <i class="fas fa-arrow-left"></i> Voltar ao portfólio
             </button>
@@ -680,7 +766,7 @@
                 </div>
                 <h1>Nike e-commerce UI</h1>
                 <p class="project-description">
-                    Um redesign moderno e interativo de uma loja online inspirada na Nike e experiência de usuário .
+                    Um redesign moderno e interativo de uma loja online inspirada na Nike e experiência de usuário.
                 </p>
             </div>
 
@@ -706,24 +792,20 @@
                 </p>
             </div>
 
-            <!-- SEÇÃO DE PRINTS DO SITE (3 IMAGENS) -->
             <div class="screenshots-gallery">
                 <h3 class="screenshots-title">
                     <i class="fas fa-camera"></i> Galeria do Projeto
                 </h3>
                 <div class="gallery-grid">
-                    <!-- Print 1 -->
                     <div class="screenshot-card" onclick="openModal('print1')">
                         <div class="screenshot-img" id="print1">
-                            <img src="https://github.com/vitor-glith/portfolio/blob/main/pagina%20inicial.png?raw=true" alt="Print 2 - Seção de Produtos">
+                            <img src="https://github.com/vitor-glith/portfolio/blob/main/pagina%20inicial.png?raw=true" alt="Print 1 - Página Inicial">
                         </div>
-                            <div class="screenshot-caption">
+                        <div class="screenshot-caption">
                             <i class="fas fa-home"></i> Página Inicial - Layout principal
                         </div>
                     </div>
-                </div>
 
-                    <!-- Print 2 -->
                     <div class="screenshot-card" onclick="openModal('print2')">
                         <div class="screenshot-img" id="print2">
                             <img src="https://github.com/vitor-glith/portfolio/blob/main/Tenis.png?raw=true" alt="Print 2 - Seção de Produtos">
@@ -733,7 +815,6 @@
                         </div>
                     </div>
 
-                    <!-- Print 3 -->
                     <div class="screenshot-card" onclick="openModal('print3')">
                         <div class="screenshot-img" id="print3">
                             <img src="https://github.com/vitor-glith/portfolio/blob/main/Carrinho.png?raw=true" alt="Print 3 - Carrinho de Compras">
@@ -742,7 +823,7 @@
                             <i class="fas fa-shopping-cart"></i> Simulação do carrinho
                         </div>
                     </div>
-
+                </div>
                 <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #5e4b8b;">
                     <i class="fas fa-hand-pointer"></i> Clique nas imagens para ampliar
                 </p>
@@ -814,6 +895,103 @@
                 <p>© 2026 Vitor Ferreira — Projeto Nike e-commerce UI</p>
                 <p style="margin-top: 0.5rem; font-size: 0.85rem;">
                     <i class="fas fa-heart" style="color: #2C1A5E;"></i> Desenvolvido com dedicação para portfólio
+                </p>
+            </footer>
+        </div>
+    </main>
+
+    <!-- PÁGINA DO PROJETO Contrastes - MARCA DE ROUPAS -->
+    <main class="content page" id="page-Contrastes">
+        <div class="project-detail-container">
+            <button onclick="showHome()" class="back-button">
+                <i class="fas fa-arrow-left"></i> Voltar ao portfólio
+            </button>
+
+            <div class="project-header">
+                <div class="project-tag">
+                    <i class="fas fa-tshirt"></i> DESIGN DE MODA
+                </div>
+                <h1>Contrastes · Coleção</h1>
+                <p class="project-description">
+                    Uma marca de roupas com designs exclusivos e autorais, criados no Canva.
+                </p>
+            </div>
+
+            <div class="Contrastes-content">
+                <h2>
+                    <i class="fas fa-palette"></i> Coleção Contrastes
+                </h2>
+                <p style="margin-bottom: 2rem; color: #5e4b8b;">
+                    Conheça os designs exclusivos da nossa coleção. Clique no botão abaixo para explorar todas as peças.
+                </p>
+
+                <!-- Botão que leva para o link do Canva -->
+                <a href="https://canva.link/nuuybducj1leoxb" target="_blank" rel="noopener noreferrer" class="btn-canva">
+                    <i class="fab fa-canva"></i> Ver todos os designs no Canva
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                        <div class="collection-info">
+                            <h3>Moletom Contrastes.</h3>
+                            <p>Conforto e estilo com design autoral e acabamento premium.</p>
+                            <div class="price">R$ 130,90</div>
+                            <button class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;" onclick="window.open('https://canva.link/nuuybducj1leoxb', '_blank')">
+                                Ver no Canva
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-info-circle"></i>
+                    Sobre a Contrastes
+                </h2>
+                <p>
+                    Contrastes é uma marca de roupas que une estilo e funcionalidade. Todos os designs são criados no Canva,
+                    com foco em peças versáteis que se adaptam ao dia a dia moderno. A coleção atual traz inspirações urbanas
+                    com um toque minimalista e contemporâneo.
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-palette"></i>
+                    Processo criativo
+                </h2>
+                <p>
+                    Cada peça da coleção Contrastes é pensada para representar a identidade da marca. Utilizo o Canva
+                    para criar mockups realistas, explorar combinações de cores e desenvolver estampas exclusivas.
+                    O resultado são peças únicas que unem conforto e estilo.
+                </p>
+                <div class="tech-stack" style="margin-top: 1rem;">
+                    <span class="tech-item"><i class="fab fa-canva"></i> Canva</span>
+                    <span class="tech-item"><i class="fas fa-palette"></i> Design Gráfico</span>
+                    <span class="tech-item"><i class="fas fa-tshirt"></i> Mockups</span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-rocket"></i>
+                    Próximos passos
+                </h2>
+                <p>
+                    A coleção Contrastes está em constante evolução. Em breve, novas peças serão adicionadas,
+                    incluindo jaquetas, acessórios e edições limitadas. Fique de olho nas novidades!
+                </p>
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://canva.link/nuuybducj1leoxb" target="_blank" class="btn-primary" rel="noopener noreferrer">
+                        <i class="fab fa-canva"></i> Explorar coleção completa
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <footer class="detail-footer">
+                <p>© 2026 Vitor Ferreira — Contrastes · Marca de Roupas</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    <i class="fas fa-heart" style="color: #2C1A5E;"></i> Designs exclusivos criados no Canva
                 </p>
             </footer>
         </div>
@@ -1017,20 +1195,25 @@
     </script>
 
     <script>
-        // Funções para alternar entre as páginas
         function showProjectDetail() {
             document.getElementById('page-home').classList.remove('active');
             document.getElementById('page-project-detail').classList.add('active');
             window.scrollTo(0, 0);
         }
 
+        function showTaskFlow() {
+            document.getElementById('page-home').classList.remove('active');
+            document.getElementById('page-taskflow').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
         function showHome() {
             document.getElementById('page-project-detail').classList.remove('active');
+            document.getElementById('page-taskflow').classList.remove('active');
             document.getElementById('page-home').classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        // Funções para o modal de imagens
         function openModal(imageId) {
             const imgElement = document.querySelector(`#${imageId} img`);
             if (imgElement) {
@@ -1046,7 +1229,6 @@
             modal.classList.remove('active');
         }
 
-        // Fechar modal com tecla ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal();
