@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitor Ferreira · portfólio imersivo</title>
+    <title>Vitor Ferreira · portfólio </title>
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
-    <!-- Font Awesome para ícones sociais (opcional mas elegante) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones sociais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* reset e base */
@@ -20,8 +20,8 @@
 
         body {
             font-family: "Inter", sans-serif;
-            background-color: #F8F8FF;      /* Ghost White */
-            color: #2C1A5E;                  /* Persian Indigo */
+            background-color: #F8F8FF;
+            color: #2C1A5E;
             line-height: 1.5;
             overflow-x: hidden;
         }
@@ -37,7 +37,7 @@
             pointer-events: none;
         }
 
-        /* overlay do conteúdo com fundo levemente translúcido */
+        /* overlay do conteúdo */
         .content {
             position: relative;
             z-index: 5;
@@ -50,6 +50,43 @@
             box-shadow: 0 0 40px rgba(44, 26, 94, 0.08);
             border-left: 1px solid rgba(44, 26, 94, 0.1);
             border-right: 1px solid rgba(44, 26, 94, 0.1);
+        }
+
+        /* Página de detalhes do projeto - container específico */
+        .project-detail-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Botão voltar */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(44, 26, 94, 0.1);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            color: #2C1A5E;
+            border: 1px solid rgba(44, 26, 94, 0.25);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+        }
+
+        .back-button:hover {
+            background: #2C1A5E;
+            color: #F8F8FF;
+            transform: translateX(-5px);
+            box-shadow: 0 10px 20px -8px rgba(44, 26, 94, 0.3);
+        }
+
+        .back-button i {
+            font-size: 1.2rem;
         }
 
         h1, h2, h3 {
@@ -140,6 +177,7 @@
             border-radius: 20px;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px -5px rgba(44, 26, 94, 0.1);
+            cursor: pointer;
         }
 
         .project-card:hover {
@@ -173,7 +211,6 @@
             font-weight: 500;
         }
 
-        /* NOVO: seção de links sociais aprimorada */
         .social-links-section {
             margin-bottom: 2rem;
             background: rgba(248, 248, 255, 0.5);
@@ -255,12 +292,305 @@
             .social-btn { padding: 0.55rem 1.2rem; font-size: 0.9rem; }
         }
 
-        /* badge sutil para contato */
         .contact-note {
             margin-top: 0.5rem;
             font-size: 0.8rem;
             color: #5e4b8b;
             opacity: 0.8;
+        }
+
+        .project-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Estilos da página de detalhes */
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .project-tag {
+            display: inline-block;
+            background: rgba(44, 26, 94, 0.15);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-detail-container h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2C1A5E 0%, #5a3d8c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-description {
+            font-size: 1.2rem;
+            color: #4f3d7a;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .project-preview {
+            background: rgba(44, 26, 94, 0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0 3rem;
+            border: 1px solid rgba(44, 26, 94, 0.15);
+            text-align: center;
+        }
+
+        /* Estilos da galeria de prints */
+        .screenshots-gallery {
+            margin: 2rem 0;
+        }
+
+        .screenshots-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #2C1A5E;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .screenshot-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(44, 26, 94, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(44, 26, 94, 0.1);
+        }
+
+        .screenshot-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -10px rgba(44, 26, 94, 0.25);
+        }
+
+        .screenshot-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2C1A5E 0%, #5a3d8c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot-card:hover .screenshot-img img {
+            transform: scale(1.05);
+        }
+
+        .screenshot-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .screenshot-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .screenshot-placeholder span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .screenshot-caption {
+            padding: 1rem;
+            background: white;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #4f3d7a;
+            border-top: 1px solid rgba(44, 26, 94, 0.1);
+        }
+
+        /* Modal para visualizar imagem ampliada */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #ccc;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(44, 26, 94, 0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin: 0.3rem;
+            border: 1px solid rgba(44, 26, 94, 0.2);
+        }
+
+        .info-section {
+            margin-bottom: 2.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(44, 26, 94, 0.1);
+        }
+
+        .info-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .info-section h2 i {
+            color: #2C1A5E;
+            font-size: 1.6rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .features-list li i {
+            color: #2C1A5E;
+            margin-top: 0.2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .tech-item {
+            background: rgba(44, 26, 94, 0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(44, 26, 94, 0.2);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #2C1A5E;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -10px rgba(44, 26, 94, 0.4);
+            background: #3d2a6b;
+        }
+
+        .detail-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(44, 26, 94, 0.2);
+            text-align: center;
+            color: #5e4b8b;
+        }
+
+        @media (max-width: 768px) {
+            .project-detail-container {
+                padding: 1.5rem;
+            }
+            .project-detail-container h1 {
+                font-size: 2.2rem;
+            }
+            .info-section {
+                padding: 1.5rem;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Controle de visibilidade das páginas */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
         }
     </style>
 </head>
@@ -268,25 +598,22 @@
 
     <div id="canvas-container"></div>
 
-    <main class="content">
+    <!-- PÁGINA INICIAL (PORTFÓLIO) -->
+    <main class="content page active" id="page-home">
         <header>
             <h1>Vitor Ferreira</h1>
-            <div class="subtitle">desenvolvedor · design & inovação</div>
+            <div class="subtitle">desenvolvedor · designer junior</div>
         </header>
 
-        <!-- NOVA SEÇÃO: Links sociais com espaços para LinkedIn e Gmail -->
         <div class="social-links-section">
             <div class="social-buttons">
-                <!-- Link GitHub com espaço definido e ícone -->
-                <a href="https://github.com/vitor-glith" target="_blank" rel="noopener noreferrer" class="social-btn" id="github-link">
+                <a href="https://github.com/vitor-glith" target="_blank" rel="noopener noreferrer" class="social-btn">
                     <i class="fab fa-github"></i> GitHub
                 </a>
-                <!-- Link LinkedIn com o link fornecido -->
-                <a href="https://www.linkedin.com/in/vitor-ferreira-16505330b/" target="_blank" rel="noopener noreferrer" class="social-btn" id="linkedin-link">
+                <a href="https://www.linkedin.com/in/vitor-ferreira-16505330b/" target="_blank" rel="noopener noreferrer" class="social-btn">
                     <i class="fab fa-linkedin-in"></i> LinkedIn
                 </a>
-                <!-- Link Gmail com o link fornecido -->
-                <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" target="_blank" rel="noopener noreferrer" class="social-btn" id="gmail-link">
+                <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" target="_blank" rel="noopener noreferrer" class="social-btn">
                     <i class="fas fa-envelope"></i> Gmail
                 </a>
             </div>
@@ -296,7 +623,7 @@
         </div>
 
         <section>
-            <h2 class="section-title">habilidades</h2>
+            <h2 class="section-title">habilidades em aprendizado</h2>
             <div class="skills-grid">
                 <span class="skill-item">Java</span>
                 <span class="skill-item">CSS</span>
@@ -304,6 +631,8 @@
                 <span class="skill-item">JavaScript</span>
                 <span class="skill-item">MySQL</span>
                 <span class="skill-item">React (aprendendo)</span>
+                <span class="skill-item">Kittl</span>
+                <span class="skill-item">Canva</span>
             </div>
             <p style="max-width: 550px; color: #3b2d5a; font-weight: 300; margin-top: 1.5rem; font-size: 1.1rem;">
                       Desenvolvedor junior em HTML, Java, CSS e apaixonado por criar experiências digitais elegantes.
@@ -312,35 +641,189 @@
 
         <section>
             <h2 class="section-title">projetos</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <span class="tag"> sistema </span>
-                    <h3>events manager</h3>
-                    <p>Organizador de eventos simples e prático. Interface clean e integração com banco de dados.</p>
-                </div>
-                <div class="project-card">
+          
+                <!-- Card do Nike e-commerce UI com função JavaScript para abrir detalhes -->
+                <div class="project-card" onclick="showProjectDetail()">
                     <span class="tag">front-end</span>
                     <h3>Nike e-commerce UI</h3>
-                    <p>Remake de design de site com foco em animações suaves e responsividade.</p>
+                    <p>Remake de design de site com foco em aprendizado em HTML e responsividade.</p>
+                    <div style="margin-top: 1rem; font-size: 0.85rem; color: #2C1A5E; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🔗 Clique para ver detalhes</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <span class="tag">fullstack</span>
-                    <h3>taskflow</h3>
-                    <p>App de tarefas com autenticação e dashboard interativo (em desenvolvimento).</p>
-                </div>
+                
             </div>
         </section>
 
         <footer class="footer">
             <span>© 2026 Vitor Ferreira — portfólio imersivo</span>
             <span>
-                <!-- footer também mantém acesso rápido aos links atualizados -->
                 <a href="https://github.com/vitor-glith" target="_blank">github</a> · 
                 <a href="https://www.linkedin.com/in/vitor-ferreira-16505330b/" target="_blank">linkedin</a> · 
                 <a href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox" target="_blank">gmail</a>
             </span>
         </footer>
     </main>
+
+    <!-- PÁGINA DE DETALHES DO PROJETO NIKE -->
+    <main class="content page" id="page-project-detail">
+        <div class="project-detail-container">
+            <!-- Botão para voltar ao portfólio -->
+            <button onclick="showHome()" class="back-button">
+                <i class="fas fa-arrow-left"></i> Voltar ao portfólio
+            </button>
+
+            <div class="project-header">
+                <div class="project-tag">
+                    <i class="fas fa-code"></i> PROJETO FRONT-END
+                </div>
+                <h1>Nike e-commerce UI</h1>
+                <p class="project-description">
+                    Um redesign moderno e interativo de uma loja online inspirada na Nike e experiência de usuário .
+                </p>
+            </div>
+
+            <div class="project-preview">
+                <p style="color: #5e4b8b; font-size: 0.9rem;">
+                    <i class="fas fa-desktop"></i> Design responsivo · Interface moderna
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-info-circle"></i>
+                    Sobre o projeto
+                </h2>
+                <p style="margin-bottom: 1rem;">
+                    Este projeto foi desenvolvido como parte do meu portfólio para demonstrar habilidades em front-end. 
+                    O objetivo era criar uma interface visualmente atraente inspirada no estilo minimalista e moderno 
+                    da Nike, e uma experiência de usuário fluida.
+                </p>
+                <p>
+                    O design foi pensado para ser responsivo, funcionando perfeitamente em dispositivos móveis, 
+                    tablets e desktops. Utilizei técnicas de CSS como Grid e HTML para criar uma navegação intuitiva e agradável.
+                </p>
+            </div>
+
+            <!-- SEÇÃO DE PRINTS DO SITE (3 IMAGENS) -->
+            <div class="screenshots-gallery">
+                <h3 class="screenshots-title">
+                    <i class="fas fa-camera"></i> Galeria do Projeto
+                </h3>
+                <div class="gallery-grid">
+                    <!-- Print 1 -->
+                    <div class="screenshot-card" onclick="openModal('print1')">
+                        <div class="screenshot-img" id="print1">
+                            <img src="https://github.com/vitor-glith/portfolio/blob/main/pagina%20inicial.png?raw=true" alt="Print 2 - Seção de Produtos">
+                        </div>
+                            <div class="screenshot-caption">
+                            <i class="fas fa-home"></i> Página Inicial - Layout principal
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Print 2 -->
+                    <div class="screenshot-card" onclick="openModal('print2')">
+                        <div class="screenshot-img" id="print2">
+                            <img src="https://github.com/vitor-glith/portfolio/blob/main/Tenis.png?raw=true" alt="Print 2 - Seção de Produtos">
+                        </div>
+                        <div class="screenshot-caption">
+                            <i class="fas fa-shopping-bag"></i> Seção de produtos em destaque
+                        </div>
+                    </div>
+
+                    <!-- Print 3 -->
+                    <div class="screenshot-card" onclick="openModal('print3')">
+                        <div class="screenshot-img" id="print3">
+                            <img src="https://github.com/vitor-glith/portfolio/blob/main/Carrinho.png?raw=true" alt="Print 3 - Carrinho de Compras">
+                        </div>
+                        <div class="screenshot-caption">
+                            <i class="fas fa-shopping-cart"></i> Simulação do carrinho
+                        </div>
+                    </div>
+
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: #5e4b8b;">
+                    <i class="fas fa-hand-pointer"></i> Clique nas imagens para ampliar
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-star"></i>
+                    Principais características
+                </h2>
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-palette"></i>
+                        <strong>Design moderno e minimalista</strong> — Interface clean inspirada na estética Nike
+                    </li>
+                    <li>
+                        <i class="fas fa-mobile-alt"></i>
+                        <strong>Responsivo</strong> — Adaptação perfeita para todos os tamanhos de tela
+                    </li>
+                    <li>
+                        <i class="fas fa-shopping-cart"></i>
+                        <strong>Simulação de carrinho</strong> — Funcionalidade interativa de adicionar produtos
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-code-branch"></i>
+                    Tecnologias utilizadas
+                </h2>
+                <div class="tech-stack">
+                    <span class="tech-item"><i class="fab fa-html5"></i> HTML </span>
+                    <span class="tech-item"><i class="fab fa-js"></i> JavaScript </span>
+                    <span class="tech-item"><i class="fas fa-mobile-alt"></i> Media Queries</span>
+                    <span class="tech-item"><i class="fas fa-cloud"></i> LocalStorage (simulação)</span>
+                    <span class="tech-item"><i class="fab fa-figma"></i> Design simples</span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-chart-line"></i>
+                    Desafios & Aprendizados
+                </h2>
+                <p style="margin-bottom: 1rem;">
+                    Durante o desenvolvimento deste projeto, enfrentei desafios como os arquivos sendo perdidos por
+                    terem formatado meu computador no meio do processo e o progresso foi todo perdido.
+                </p>
+                <p>
+                    Este projeto me permitiu aprimorar minhas habilidades em CSS moderno, especialmente no uso de 
+                    Grid Layout para criar layouts complexos. Além disso, pratiquei com HTML puro para criar 
+                    interatividade com mais facilidade.
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2>
+                    <i class="fas fa-rocket"></i>
+                    Próximos passos
+                </h2>
+                <p>
+                    Gostei de desenvolver este projeto e pretendo seguir nessa parte do design gráfico, UX e UI, talvez
+                    algum dia eu termine este site, mas por enquanto vou manter ele simples assim.
+                </p>
+            </div>
+                
+            <footer class="detail-footer">
+                <p>© 2026 Vitor Ferreira — Projeto Nike e-commerce UI</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    <i class="fas fa-heart" style="color: #2C1A5E;"></i> Desenvolvido com dedicação para portfólio
+                </p>
+            </footer>
+        </div>
+    </main>
+
+    <!-- Modal para visualizar imagens ampliadas -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="Imagem ampliada">
+    </div>
 
     <script type="importmap">
         {
@@ -353,13 +836,12 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- cena, câmera, renderer ---
         const container = document.getElementById('canvas-container');
         const width = window.innerWidth;
         const height = window.innerHeight;
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#F8F8FF'); // Ghost White base
+        scene.background = new THREE.Color('#F8F8FF');
 
         const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
         camera.position.set(0, 2, 18);
@@ -370,50 +852,40 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // --- NOVO FUNDO: ondas suaves + partículas brilhantes (mais bonito e orgânico) ---
-        
-        // 1. Adicionar neblina suave para profundidade
         scene.fog = new THREE.FogExp2('#F8F8FF', 0.025);
 
-        // 2. Camada de ondas/linhas curvas (usando um mesh grande com geometria personalizada)
         const waveCount = 18;
         const pointsPerWave = 80;
-        const waveColor = 0x2C1A5E; // Persian Indigo
 
         for (let j = 0; j < waveCount; j++) {
             const positions = [];
             const indices = [];
             const colors = [];
 
-            const yBase = (j - waveCount/2) * 1.1; // espaçamento vertical
+            const yBase = (j - waveCount/2) * 1.1;
             const amplitude = 0.8 + Math.random() * 1.2;
             const frequency = 0.5 + Math.random() * 0.4;
-            const speedFactor = 0.2 + Math.random() * 0.3; // será usado na animação
+            const speedFactor = 0.2 + Math.random() * 0.3;
             
-            // Gerar pontos da linha (como uma polyline)
             for (let i = 0; i <= pointsPerWave; i++) {
-                const t = i / pointsPerWave; // 0 a 1
-                const x = (t - 0.5) * 28; // espalha horizontalmente
-                // onda senoidal + pequena variação
+                const t = i / pointsPerWave;
+                const x = (t - 0.5) * 28;
                 const z = Math.sin(t * Math.PI * 2 * frequency) * amplitude * 1.5 
                         + Math.cos(t * Math.PI * 3) * 0.3;
                 
                 positions.push(x, yBase + Math.sin(t * Math.PI) * 0.5, z);
                 
-                // cores variam entre ghost white e persian indigo com transparência
-                const mix = 0.3 + 0.5 * Math.sin(t * Math.PI * 2); // varia entre 0.2 e 0.8
-                const r = 0.172 * mix; // 2C1A5E em RGB: 44,26,94 -> 0.172,0.102,0.369
+                const mix = 0.3 + 0.5 * Math.sin(t * Math.PI * 2);
+                const r = 0.172 * mix;
                 const g = 0.102 * mix;
                 const b = 0.369 * mix;
                 colors.push(r, g, b);
             }
 
-            // Criar geometria de linha (LineSegments ou Line)
             const geometry = new THREE.BufferGeometry();
             geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
             geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             
-            // Para conectar pontos em sequência, criamos índices de linha
             for (let i = 0; i < pointsPerWave; i++) {
                 indices.push(i, i + 1);
             }
@@ -422,8 +894,7 @@
             const material = new THREE.LineBasicMaterial({ 
                 vertexColors: true, 
                 transparent: true, 
-                opacity: 0.18,
-                linewidth: 1 // (webgl limitação, mas ok)
+                opacity: 0.18
             });
             
             const waveLine = new THREE.LineSegments(geometry, material);
@@ -431,34 +902,31 @@
             scene.add(waveLine);
         }
 
-        // 3. Partículas brilhantes (pontos delicados) para dar um aspecto de poeira cósmica / luzes
         const particleCount = 1200;
         const particleGeo = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
         const particleColors = new Float32Array(particleCount * 3);
 
         for (let i = 0; i < particleCount; i++) {
-            // distribuição em um volume elíptico
-            const r = 12 + Math.random() * 15; // distância radial
+            const r = 12 + Math.random() * 15;
             const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1); // esférica
+            const phi = Math.acos(2 * Math.random() - 1);
             
             const x = r * Math.sin(phi) * Math.cos(theta);
-            const y = r * Math.sin(phi) * Math.sin(theta) * 0.6; // achatamento vertical
+            const y = r * Math.sin(phi) * Math.sin(theta) * 0.6;
             const z = r * Math.cos(phi);
             
             particlePositions[i*3] = x;
             particlePositions[i*3+1] = y;
             particlePositions[i*3+2] = z;
             
-            // cores: variações de Persian Indigo e tons claros
             const isIndigo = Math.random() > 0.4;
             if (isIndigo) {
-                particleColors[i*3] = 0.27;   // 2C1A5E
+                particleColors[i*3] = 0.27;
                 particleColors[i*3+1] = 0.16;
                 particleColors[i*3+2] = 0.58;
             } else {
-                particleColors[i*3] = 0.95;   // quase branco
+                particleColors[i*3] = 0.95;
                 particleColors[i*3+1] = 0.95;
                 particleColors[i*3+2] = 1.0;
             }
@@ -466,16 +934,6 @@
 
         particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
         particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-
-        const particleMat = new THREE.PointsMaterial({ 
-            size: 0.15, 
-            vertexColors: true, 
-            transparent: true, 
-            opacity: 0.5,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            map: createParticleTexture() // textura circular suave
-        });
 
         function createParticleTexture() {
             const canvas = document.createElement('canvas');
@@ -494,10 +952,19 @@
             return new THREE.CanvasTexture(canvas);
         }
 
+        const particleMat = new THREE.PointsMaterial({ 
+            size: 0.15, 
+            vertexColors: true, 
+            transparent: true, 
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            map: createParticleTexture()
+        });
+
         const particles = new THREE.Points(particleGeo, particleMat);
         scene.add(particles);
 
-        // 4. Adicionar algumas formas orgânicas extras (poucas nuvens de pontos com brilho)
         const extraParticlesGeo = new THREE.BufferGeometry();
         const extraPos = [];
         for (let i = 0; i < 400; i++) {
@@ -513,29 +980,21 @@
         const extraParticles = new THREE.Points(extraParticlesGeo, extraMat);
         scene.add(extraParticles);
 
-        // --- animação suave e orgânica ---
-        let clock = new THREE.Clock();
-
         function animate() {
             requestAnimationFrame(animate);
-            const elapsedTime = performance.now() * 0.001; // seconds
+            const elapsedTime = performance.now() * 0.001;
             
-            // Movimento global: todo o cenário rotaciona infinitesimalmente
-            // Isso dá uma sensação orgânica, como se o observador flutuasse
             scene.rotation.y += 0.0002;
             scene.rotation.x = Math.sin(elapsedTime * 0.1) * 0.02;
             
-            // as partículas adicionais têm rotação própria
             particles.rotation.y += 0.0005;
             particles.rotation.x += 0.0003;
             
             extraParticles.rotation.y -= 0.0004;
             extraParticles.rotation.z += 0.0001;
 
-            // Pequeno movimento dinâmico em algumas linhas para um toque extra de vida
             scene.traverse(obj => {
                 if (obj.isLineSegments && obj.userData.speed !== undefined) {
-                    // modulação opcional: pequena variação de opacidade (efeito de respiração)
                     const mat = obj.material;
                     if (mat && mat.transparent) {
                         const newOpacity = 0.15 + Math.sin(elapsedTime * 0.6 + obj.userData.speed * 10) * 0.05;
@@ -549,16 +1008,50 @@
 
         animate();
 
-        // --- redimensionamento ---
         window.addEventListener('resize', onWindowResize, false);
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        
-        // small console hint (apenas elegância)
-        console.log("✨ Portfólio Vitor Ferreira — Links LinkedIn e Gmail adicionados com sucesso!");
+    </script>
+
+    <script>
+        // Funções para alternar entre as páginas
+        function showProjectDetail() {
+            document.getElementById('page-home').classList.remove('active');
+            document.getElementById('page-project-detail').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            document.getElementById('page-project-detail').classList.remove('active');
+            document.getElementById('page-home').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Funções para o modal de imagens
+        function openModal(imageId) {
+            const imgElement = document.querySelector(`#${imageId} img`);
+            if (imgElement) {
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById('modalImage');
+                modalImg.src = imgElement.src;
+                modal.classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
